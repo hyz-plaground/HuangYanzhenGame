@@ -5,6 +5,7 @@ public class PlayerProperties : Singleton<PlayerProperties>
     public float PLAYER_DEFAULT_JUMP_SPEED = 10f;
     public float PLAYER_DEFAULT_RUSH_SPEED = 40f;
     public string PLAYER_GROUND_TAG = "ENV_GROUND";         // Ground Detection
+    public string PLAYER_TAG = "ENT_PLAYER";
     
     // Static Player Properties
     public float PLAYER_GROUND_DETECTION_RACAST_DISTANCE = 0.2f;

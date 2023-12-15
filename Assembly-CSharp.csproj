@@ -42,17 +42,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/EventCenter/EventManager.cs" />
-    <Compile Include="Assets/Scripts/Environment/Triggers/EnvSpaceTrigger.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/RegionalTriggers/EnvSpaceTrigger.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Button.cs" />
     <Compile Include="Assets/Scripts/Singleton/SingletonMonoDontDestroy.cs" />
     <Compile Include="Assets/Scripts/Player/Player.cs" />
     <Compile Include="Assets/Scripts/GlobalSettings/EntitySettings.cs" />
     <Compile Include="Assets/Scripts/Singleton/SingletonMono.cs" />
+    <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/Door.cs" />
     <Compile Include="Assets/Scripts/EventCenter/EventList.cs" />
     <Compile Include="Assets/Scripts/Singleton/Singleton.cs" />
-    <Compile Include="Assets/Scripts/Environment/Triggers/Button.cs" />
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/ReactMachine.cs" />
-    <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/Door.cs" />
-    <Compile Include="Assets\Scripts\GlobalSettings\MachineSettings.cs" />
+    <Compile Include="Assets/Scripts/GlobalSettings/MachineSettings.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Switch.cs" />
     <Reference Include="UnityEngine">
       <HintPath>/Applications/Unity/Hub/Editor/2021.3.21f1c1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

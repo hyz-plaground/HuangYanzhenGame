@@ -25,6 +25,6 @@ public abstract class ReactMachine : MonoBehaviour
 
     protected abstract void React(GameObject triggerTarget);
 
-    protected abstract void React(GameObject triggerTarget, bool isEnable);
+    protected abstract void React(GameObject triggerTarget, bool isLetMachineEnable);
     
 }

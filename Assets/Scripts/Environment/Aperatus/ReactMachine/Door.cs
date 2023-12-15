@@ -3,46 +3,71 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Door : ReactMachine
 {
     public float moveSpeed = MachineProperties.DOOR_MOVE_SPEED;
     public float doorMoveOffset = MachineProperties.DOOR_MOVE_OFFSET;
+    public bool isSetDefaultOpen = false;       // Unchecked most of the time.
+    
+    // Static property
     private Vector3 _closedPosition;
     private Vector3 _openedPosition;
+    
+    // Dynamic property
+    private bool _isOpen;
 
-    private void Start()
+    /* Initialize Parameters */
+    private void InitParams()
+    {
+        // Initialize positions
+        _closedPosition = transform.position;
+        _openedPosition = transform.position + new Vector3(0,transform.localScale.y/doorMoveOffset,0);
+        
+        // Initialize status
+        _isOpen = isSetDefaultOpen;
+        StopAllCoroutines();
+        StartCoroutine(DoorMove(isSetDefaultOpen));
+    }
+
+    private new void Start()
     {
         // Start method in the parent class.
         base.Start();   // This have to be invoked otherwise no event can registered!
-        _closedPosition = transform.position;
-        _openedPosition = new Vector3(transform.position.x,transform.position.y + transform.localScale.y/doorMoveOffset, transform.position.z);
+        InitParams();
     }
 
+    /* React to triggers. */
     protected override void React(GameObject triggerTarget)
     {
+        _isOpen = !_isOpen;
+        StopAllCoroutines();
+        StartCoroutine(DoorMove(_isOpen));
     }
 
-    protected override void React(GameObject triggerTarget, bool isEnable)
+    /* React to buttons.*/
+    protected override void React(GameObject triggerTarget, bool isLetMachineEnable)
     {
         // Guardian: If the reference is not self, don't act!
         if (!ReferenceEquals(triggerTarget, gameObject))
             return;
             
+        // Syncronize states
+        _isOpen = isLetMachineEnable;
+        
         // Stop current coroutines. This prevents door lagging.
         StopAllCoroutines();
         
         // Start a new coroutine.
-        StartCoroutine(DoorMove(isEnable));
+        StartCoroutine(DoorMove(isLetMachineEnable));
 
     }
     
-    // Door move to target position.
-    private IEnumerator DoorMove(bool isEnable)
+    /* Door move to target position. */
+    private IEnumerator DoorMove(bool isLetMachineEnable)
     {
-        Debug.Log("Coroutine Started.");
-
-        Vector3 targetPosition = isEnable ? _openedPosition : _closedPosition;
+        Vector3 targetPosition = isLetMachineEnable ? _openedPosition : _closedPosition;
         
         // Distance between current & target position.
         float distance = Vector3.Distance(transform.position, targetPosition);

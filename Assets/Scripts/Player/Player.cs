@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 
@@ -83,6 +84,7 @@ public class Player : MonoBehaviour
         bool jumpInput = Input.GetKey(KeyCode.Space);
         bool flyInput = Input.GetKeyDown(KeyCode.Space);
         bool rushInput = Input.GetKey(KeyCode.R);
+        bool interactInput = Input.GetKey(KeyCode.F);
         
         // Control Facing Direction
         _isFaceTowardsRight = xInput != 0 ? xInput >= 0 : _isFaceTowardsRight;
@@ -112,6 +114,10 @@ public class Player : MonoBehaviour
         
         /* Perform moving. */
         _rigid.velocity = new Vector2(xMove, jumpMove);
+        
+        /* Check player interaction. */
+        Interact(interactInput);
+        
 
     }
     
@@ -148,6 +154,17 @@ public class Player : MonoBehaviour
     {
         return _isSpaceGravity;
     }
+    
+    /// <summary>
+    /// Player interact with environment.
+    /// </summary>
+    /// <param name="isIntendInteract"></param>
+    void Interact(bool isIntendInteract)
+    {
+        if (!isIntendInteract)
+            return;
+        EventCenterManager.Instance.EventTrigger(GameEvent.PlayerTryInteract);
+    }
 
     #endregion
 
@@ -155,24 +172,7 @@ public class Player : MonoBehaviour
 
     void PassiveSenseEnvironment()
     {
-        DetectFallDamage();
-    }
-    
-    /// <summary>
-    /// Player gets fall damage.
-    /// </summary>
-    void DetectFallDamage()
-    {
-        bool isOnGround = CheckGround();
-        
-        // Falling to fast, get hurt damage.
-        // Falling speed exceeds min fall damage speed, do fall damage.
-        if (_rigid.velocity.y <= (-1) * fallDamageSpeedThreshold && isOnGround)
-        {
-            float rawhurtDamageAmount = Math.Abs(_rigid.velocity.y) * 10f;
-            int hurtDamageAmount = (int)rawhurtDamageAmount;
-            GetHurt(hurtDamageAmount);
-        }
+        return;
     }
 
     // Check whether the character is on ground. Use box ray cast.
