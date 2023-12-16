@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 单例工具类
+/// Singleton Tool Class. Any singleton class intended should inherit this class.
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T"> The class to inherit this singleton base class.</typeparam>
 public class Singleton<T> where T : class, new()
 {
-    private static T m_instance;
+    private static T _instance;
 
     public static T Instance
     {
-        get { return m_instance ??= new T(); }
+        get { return _instance ??= new T(); }
     }
     
 }

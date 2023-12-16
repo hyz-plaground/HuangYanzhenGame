@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 
 public class Door : ReactMachine
 {
+    [SerializeField]
     public float moveSpeed = MachineProperties.DOOR_MOVE_SPEED;
     public float doorMoveOffset = MachineProperties.DOOR_MOVE_OFFSET;
     public bool isSetDefaultOpen = false;       // Unchecked most of the time.
@@ -34,13 +35,17 @@ public class Door : ReactMachine
     private new void Start()
     {
         // Start method in the parent class.
-        base.Start();   // This have to be invoked otherwise no event can registered!
+        base.Start();       // This have to be invoked otherwise no event can be registered!
         InitParams();
     }
 
     /* React to triggers. */
     protected override void React(GameObject triggerTarget)
     {
+        // Guardian: If the reference is not self, don't act!
+        if (!ReferenceEquals(triggerTarget, gameObject))
+            return;
+        
         _isOpen = !_isOpen;
         StopAllCoroutines();
         StartCoroutine(DoorMove(_isOpen));
@@ -56,10 +61,7 @@ public class Door : ReactMachine
         // Syncronize states
         _isOpen = isLetMachineEnable;
         
-        // Stop current coroutines. This prevents door lagging.
-        StopAllCoroutines();
-        
-        // Start a new coroutine.
+        StopAllCoroutines();    // Stop current coroutines. This prevents door lagging.
         StartCoroutine(DoorMove(isLetMachineEnable));
 
     }

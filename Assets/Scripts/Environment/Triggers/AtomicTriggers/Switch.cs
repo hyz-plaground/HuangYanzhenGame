@@ -10,16 +10,16 @@ public class Switch : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, AlterSwitchState);
+        EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, AlterTargetMachineStatus);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        EventCenterManager.Instance.RemoveEventListener(GameEvent.PlayerTryInteract, AlterSwitchState);
+        EventCenterManager.Instance.RemoveEventListener(GameEvent.PlayerTryInteract, AlterTargetMachineStatus);
     }
 
 
-    private void AlterSwitchState()
+    private void AlterTargetMachineStatus()
     {
         EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredBySwitch,targetReationObject);
     }

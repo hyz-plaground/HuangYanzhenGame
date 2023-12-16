@@ -80,7 +80,6 @@ public class Player : MonoBehaviour
         /* Get WASD inputs */
         // TODO: Get these inputs into configuration file.
         float xInput = Input.GetAxis("Horizontal");
-        //float yInput = Input.GetAxis("Vertical");
         bool jumpInput = Input.GetKey(KeyCode.Space);
         bool flyInput = Input.GetKeyDown(KeyCode.Space);
         bool rushInput = Input.GetKey(KeyCode.R);
@@ -118,7 +117,6 @@ public class Player : MonoBehaviour
         /* Check player interaction. */
         Interact(interactInput);
         
-
     }
     
     /// <summary>

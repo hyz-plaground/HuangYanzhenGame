@@ -8,8 +8,11 @@ public class EnvSpaceTrigger : MonoBehaviour
     {
         if (other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
         {
-           //Debug.Log("Enter space.");
-           EventCenterManager.Instance.EventTrigger<bool>(GameEvent.PlayerEnterSpace, true);
+            EventCenterManager.Instance.EventTrigger(GameEvent.PlayerEnterSpace, true);
+        }
+        else
+        {
+            EventCenterManager.Instance.EventTrigger(GameEvent.CollectableEnterSpace, true);
         }
     }
     
@@ -17,10 +20,11 @@ public class EnvSpaceTrigger : MonoBehaviour
     {
         if (other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
         {
-            //Debug.Log("Exit space.");
-            EventCenterManager.Instance.EventTrigger<bool>(GameEvent.PlayerEnterSpace, false);
+            EventCenterManager.Instance.EventTrigger(GameEvent.PlayerEnterSpace, false);
+        }
+        else
+        {
+            EventCenterManager.Instance.EventTrigger(GameEvent.CollectableEnterSpace, false);
         }
     }
-    
-    
 }

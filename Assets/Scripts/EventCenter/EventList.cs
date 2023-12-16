@@ -8,6 +8,8 @@ public enum GameEvent
     PlayerEnterSpace,
     PlayerGetHurt,
     MachineTriggeredBySwitch,
+    ExistCollectable,
+    CollectableEnterSpace,
     
     // Double param.
     MachineTriggeredByButton,

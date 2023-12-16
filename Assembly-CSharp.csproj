@@ -54,6 +54,8 @@
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/ReactMachine.cs" />
     <Compile Include="Assets/Scripts/GlobalSettings/MachineSettings.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Switch.cs" />
+    <Compile Include="Assets/Scripts/Player/PlayerHand.cs" />
+    <Compile Include="Assets/Scripts/Environment/Object/Collectable.cs" />
     <Reference Include="UnityEngine">
       <HintPath>/Applications/Unity/Hub/Editor/2021.3.21f1c1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
