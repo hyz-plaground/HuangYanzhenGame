@@ -9,6 +9,7 @@ public enum GameEvent
     PlayerGetHurt,
     MachineTriggeredBySwitch,
     ExistCollectable,
+    NonExistCollectable,
     CollectableEnterSpace,
     
     // Double param.
