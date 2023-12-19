@@ -14,7 +14,7 @@ public class Collectable : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
+        if (other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
             EventCenterManager.Instance.EventTrigger(GameEvent.ExistCollectable,gameObject);
     }
 
