@@ -17,7 +17,7 @@ public class Door : ReactMachine
     public float moveSpeed = MachineProperties.DOOR_MOVE_SPEED;
     public float doorMoveOffset = MachineProperties.DOOR_MOVE_OFFSET;
     public bool isSetDefaultOpen = false;       // Unchecked most of the time.
-    public DoorOpenDir doorOpenDir = DoorOpenDir.UP; 
+    public DoorOpenDir doorOpenDir = DoorOpenDir.UP;    // Default move up. 
     
     // Static property
     private Vector3 _closedPosition;
@@ -70,7 +70,7 @@ public class Door : ReactMachine
         if (!ReferenceEquals(triggerTarget, gameObject))
             return;
             
-        // Syncronize states
+        // Synchronize states
         _isOpen = isLetMachineEnable;
         
         StopAllCoroutines();    // Stop current coroutines. This prevents door lagging.
