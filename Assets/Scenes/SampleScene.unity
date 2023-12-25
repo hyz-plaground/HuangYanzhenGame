@@ -195,6 +195,10 @@ PrefabInstance:
       propertyPath: targetReationObject
       value: 
       objectReference: {fileID: 1140599276}
+    - target: {fileID: 1917121263644246943, guid: ae1fd68916fda4e128bc291c4cc29ae5, type: 3}
+      propertyPath: targetReactionObject
+      value: 
+      objectReference: {fileID: 1140599276}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -679,6 +683,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6722343350053660475, guid: 252e8263002754b97be9530f7bb3cb04, type: 3}
       propertyPath: targetReationObject
+      value: 
+      objectReference: {fileID: 453931234}
+    - target: {fileID: 6722343350053660475, guid: 252e8263002754b97be9530f7bb3cb04, type: 3}
+      propertyPath: targetReactionObject
       value: 
       objectReference: {fileID: 453931234}
     - target: {fileID: 6722343350053660487, guid: 252e8263002754b97be9530f7bb3cb04, type: 3}
@@ -1374,6 +1382,10 @@ PrefabInstance:
       propertyPath: targetReationObject
       value: 
       objectReference: {fileID: 1968136937}
+    - target: {fileID: 1917121263644246943, guid: ae1fd68916fda4e128bc291c4cc29ae5, type: 3}
+      propertyPath: targetReactionObject
+      value: 
+      objectReference: {fileID: 1968136937}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1616,6 +1628,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6722343350053660475, guid: 252e8263002754b97be9530f7bb3cb04, type: 3}
       propertyPath: targetReationObject
+      value: 
+      objectReference: {fileID: 453931234}
+    - target: {fileID: 6722343350053660475, guid: 252e8263002754b97be9530f7bb3cb04, type: 3}
+      propertyPath: targetReactionObject
       value: 
       objectReference: {fileID: 453931234}
     - target: {fileID: 6722343350053660487, guid: 252e8263002754b97be9530f7bb3cb04, type: 3}

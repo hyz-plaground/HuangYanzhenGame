@@ -52,14 +52,15 @@
     <Compile Include="Assets/Scripts/Environment/Object/Collectable.cs" />
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/Door.cs" />
     <Compile Include="Assets/Scripts/Player/PlayerHand.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/AtomicTrigger.cs" />
     <Compile Include="Assets/Scripts/EventCenter/EventManager.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/PressureButton.cs" />
     <Compile Include="Assets/Scripts/Singleton/SingletonMonoDontDestroy.cs" />
     <Compile Include="Assets/Scripts/EventCenter/EventList.cs" />
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/ReactMachine.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/RegionalTriggers/EnvSpaceTrigger.cs" />
     <Compile Include="Assets/Scripts/Singleton/Singleton.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Switch.cs" />
-    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Button.cs" />
     <None Include="Library/PackageCache/com.unity.burst@1.8.11/package.json" />
     <None Include="Library/PackageCache/com.unity.collections@1.2.4/Unity.Collections.LowLevel.ILSupport/README.txt" />
     <None Include="Library/PackageCache/com.unity.ext.nunit@1.0.6/package.json" />
