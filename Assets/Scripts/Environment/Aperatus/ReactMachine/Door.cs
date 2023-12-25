@@ -5,12 +5,19 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+public enum DoorOpenDir
+{
+    UP,
+    DOWN
+}
+
 public class Door : ReactMachine
 {
     [SerializeField]
     public float moveSpeed = MachineProperties.DOOR_MOVE_SPEED;
     public float doorMoveOffset = MachineProperties.DOOR_MOVE_OFFSET;
     public bool isSetDefaultOpen = false;       // Unchecked most of the time.
+    public DoorOpenDir doorOpenDir = DoorOpenDir.UP; 
     
     // Static property
     private Vector3 _closedPosition;
@@ -23,8 +30,13 @@ public class Door : ReactMachine
     private void InitParams()
     {
         // Initialize positions
+        float doorOpenDirMultiplier = doorOpenDir == DoorOpenDir.DOWN ? -1 : 1; // Default go up.
         _closedPosition = transform.position;
-        _openedPosition = transform.position + new Vector3(0,transform.localScale.y/doorMoveOffset,0);
+        _openedPosition = transform.position + new Vector3(
+            0,
+            doorOpenDirMultiplier * transform.localScale.y/doorMoveOffset,
+            0
+            );
         
         // Initialize status
         _isOpen = isSetDefaultOpen;
