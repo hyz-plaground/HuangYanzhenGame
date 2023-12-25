@@ -223,7 +223,6 @@ public class Player : MonoBehaviour
         {
             _rigid.gravityScale += Time.deltaTime * 10f;
         }
-        
     }
 
 
