@@ -61,6 +61,7 @@
     <Compile Include="Assets/Scripts/Environment/Triggers/RegionalTriggers/EnvSpaceTrigger.cs" />
     <Compile Include="Assets/Scripts/Singleton/Singleton.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Switch.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/InteractButton.cs" />
     <None Include="Library/PackageCache/com.unity.burst@1.8.11/package.json" />
     <None Include="Library/PackageCache/com.unity.collections@1.2.4/Unity.Collections.LowLevel.ILSupport/README.txt" />
     <None Include="Library/PackageCache/com.unity.ext.nunit@1.0.6/package.json" />

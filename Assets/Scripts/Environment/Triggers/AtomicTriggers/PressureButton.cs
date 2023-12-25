@@ -11,6 +11,7 @@ public class PressureButton : AtomicTrigger
 
     private void InitButtonPosition()
     {
+        _button = transform.GetChild(0);
         try
         {
             _releasePosition = _button.position;
@@ -24,7 +25,6 @@ public class PressureButton : AtomicTrigger
 
     private void Start()
     {
-        _button = transform.GetChild(0);
         InitButtonPosition();
     }
 

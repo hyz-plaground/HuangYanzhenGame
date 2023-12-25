@@ -42,7 +42,7 @@ public class EventCenterManager : Singleton<EventCenterManager>
             m_eventDict.Add(eventName, unityEvent);
         }
         (unityEvent as UnityEvent<T,K>)?.AddListener(action);
-    }
+    } 
 
     /// <summary>
     /// 移除事件监听
