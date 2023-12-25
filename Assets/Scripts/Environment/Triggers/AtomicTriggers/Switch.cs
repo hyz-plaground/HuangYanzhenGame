@@ -6,14 +6,14 @@ using UnityEngine.Serialization;
 
 public class Switch : AtomicTrigger
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    
+    protected override void PlayerEnterAction()
     {
         EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, TriggerReactMachineIgnoreState);
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    protected override void PlayerExitAction()
     {
         EventCenterManager.Instance.RemoveEventListener(GameEvent.PlayerTryInteract, TriggerReactMachineIgnoreState);
     }
-    
 }

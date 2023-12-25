@@ -13,15 +13,16 @@ public class InteractButton : AtomicTrigger
     [SerializeField] 
     public int countdownSeconds = 5;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected override void PlayerEnterAction()
     {
         EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, PerformEnableReactMachineCycle);
     }
-
-    private void OnTriggerExit2D(Collider2D other)
+    
+    protected override void PlayerExitAction()
     {
         EventCenterManager.Instance.RemoveEventListener(GameEvent.PlayerTryInteract, PerformEnableReactMachineCycle);
     }
+    
 
     /* Enable-countdown-Disable method. Uses coroutine.*/
     private void PerformEnableReactMachineCycle()

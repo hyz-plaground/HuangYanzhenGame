@@ -10,6 +10,7 @@ public enum GameEvent
     MachineTriggeredBySwitch,
     ExistCollectable,
     NonExistCollectable,
+    WithinRangeOfInteractable,
     CollectableEnterSpace,
     
     // Double param.

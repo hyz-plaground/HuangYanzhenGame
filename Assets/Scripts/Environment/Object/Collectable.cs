@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class Collectable : MonoBehaviour
 {
-    private Rigidbody2D rigid;
+    private Rigidbody2D _rigid;
     private void Start()
     {
-        rigid = GetComponent<Rigidbody2D>();
+        _rigid = GetComponent<Rigidbody2D>();
         EventCenterManager.Instance.AddEventListener<bool>(GameEvent.CollectableEnterSpace,AdjustGravityScale);
     }
 
@@ -26,7 +26,7 @@ public class Collectable : MonoBehaviour
 
     private void AdjustGravityScale(bool isCollectableEnterSpace)
     {
-        rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
+        _rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
     }
     
 }

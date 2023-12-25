@@ -10,8 +10,7 @@ public class PlayerHand : MonoBehaviour
     private GameObject _objectInRange;
     private Rigidbody2D _objectRigid;
     private bool _isCollecting = false;
-
-    private Vector3 stickyDestination;
+    private bool _isPlayerWithinRangeOfInteractable = false;
 
     private void Start()
     {
@@ -21,6 +20,8 @@ public class PlayerHand : MonoBehaviour
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.NonExistCollectable, IgnoreObject);
         // Player intend to collect object.
         EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, CollectObject);
+        // Player is in range of an interactable object.
+        EventCenterManager.Instance.AddEventListener<bool>(GameEvent.WithinRangeOfInteractable, SetIsPlayerWithinInteractable);
     }
     
     /* Player Observes this object, but doesn't collect it.*/
@@ -40,6 +41,8 @@ public class PlayerHand : MonoBehaviour
     }
 
     /* Designed in a coroutine way so that it is not bothered by frequent happen of events.*/
+    // This part comes from chat gpt. I have absolutely no idea how it works.
+    // (In fact, I'm just being lazy to interpret this. As long as it works it's fine.)
     private void CollectObject()
     {
         if (!_objectInRange || _isCollecting)
@@ -47,11 +50,13 @@ public class PlayerHand : MonoBehaviour
 
         if (!_isHandOccupied)
         {
+            // Collect object.
             StopAllCoroutines();
             StartCoroutine(CollectCoroutine());
         }
-        else
+        else if(CheckIsAllowRelease())
         {
+            // Release object.
             StopAllCoroutines();
             StartCoroutine(ReleaseCoroutine());
         }
@@ -73,7 +78,7 @@ public class PlayerHand : MonoBehaviour
         EventCenterManager.Instance.RemoveEventListener<GameObject>(GameEvent.ExistCollectable, ObserveObject);
 
         yield return new WaitForSeconds(0.5f); // Wait for 0.5 sec
-
+        
         _isCollecting = false;
     }
 
@@ -98,6 +103,15 @@ public class PlayerHand : MonoBehaviour
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.ExistCollectable, ObserveObject);
         _isCollecting = false;
     }
-    
 
+    private void SetIsPlayerWithinInteractable(bool targetBoolValue)
+    {
+        _isPlayerWithinRangeOfInteractable = targetBoolValue;
+    }
+
+    private bool CheckIsAllowRelease()
+    {
+        return !_isPlayerWithinRangeOfInteractable;
+    }
+    
 }

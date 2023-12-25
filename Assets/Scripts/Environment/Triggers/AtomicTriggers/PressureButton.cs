@@ -23,32 +23,17 @@ public class PressureButton : AtomicTrigger
         }
     }
 
+    private void InitParams()
+    {
+        SetUsePlayerInteractRange(false);
+    }
+
     private void Start()
     {
         InitButtonPosition();
+        InitParams();
     }
-
-    /* Player stand on button, triggers react machine. */
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        // Play Animation
-        StopAllCoroutines();
-        StartCoroutine(DoButtonPressOrReleaseAnimation(true));
-        // Disable the react machine.
-        EnableReactMachine();   // Enable the react machine.
-        //EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredByButton, targetReationObject, true);
-    }
-
-    /* Player leaves a button, de-triggers react machine. */
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        // Play animation.
-        StopAllCoroutines();
-        StartCoroutine(DoButtonPressOrReleaseAnimation(false));
-        // Disable the react machine.
-        DisableReactMachine(); 
-        //EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredByButton, targetReationObject, false);
-    }
+    
 
     /* Play trigger & de-trigger animation. */
     private IEnumerator DoButtonPressOrReleaseAnimation(bool isButtonPressed)
@@ -73,6 +58,23 @@ public class PressureButton : AtomicTrigger
             // Wait for one frame.
             yield return null;
         }
+    }
+    
+    protected override void PlayerEnterAction()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DoButtonPressOrReleaseAnimation(true));
+        // Disable the react machine.
+        EnableReactMachine();   // Enable the react machine.
+    }
+
+    protected override void PlayerExitAction()
+    {
+        // Play animation.
+        StopAllCoroutines();
+        StartCoroutine(DoButtonPressOrReleaseAnimation(false));
+        // Disable the react machine.
+        DisableReactMachine(); 
     }
 
 }

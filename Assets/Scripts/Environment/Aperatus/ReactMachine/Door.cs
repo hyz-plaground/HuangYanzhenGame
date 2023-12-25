@@ -92,7 +92,7 @@ public class Door : ReactMachine
             // Distance to move each frame.
             float step = moveSpeed * Time.deltaTime;
 
-            // Position in the next frame.
+            // Position in the next frame. 
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
 
             // Update distance.
