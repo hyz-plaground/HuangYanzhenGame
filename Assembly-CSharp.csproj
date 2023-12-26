@@ -51,7 +51,6 @@
     <Compile Include="Assets/Scripts/GlobalSettings/MachineSettings.cs" />
     <Compile Include="Assets/Scripts/Environment/Object/Collectable.cs" />
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/Door.cs" />
-    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/InteractableTrigger.cs" />
     <Compile Include="Assets/Scripts/Player/PlayerHand.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/AtomicTrigger.cs" />
     <Compile Include="Assets/Scripts/EventCenter/EventManager.cs" />

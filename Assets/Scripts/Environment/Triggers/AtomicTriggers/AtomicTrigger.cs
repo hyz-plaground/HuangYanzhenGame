@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 /// many ways: A pressure button, or a player interactable button using F key. This abstract class only
 /// defines  ways of Enabling, Disabling &amp; Triggering the target react machine. The detailed condition of when or how to
 /// do this is described in its inheritors.
+/// 
 /// <param name="usePlayerInteractRange">
 /// If set to true, this apparatus will trigger WithinRangeOfInteractable event.
 /// Such that player can not drop items during its staying in this range.
