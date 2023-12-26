@@ -19,7 +19,7 @@ public class PlayerHand : MonoBehaviour
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.ExistCollectable, ObserveObject);
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.NonExistCollectable, IgnoreObject);
         // Player intend to collect object.
-        EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, CollectObject);
+        EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, InteractWithThisObject);
         // Player is in range of an interactable object.
         EventCenterManager.Instance.AddEventListener<bool>(GameEvent.WithinRangeOfInteractable, SetIsPlayerWithinInteractable);
     }
@@ -43,7 +43,7 @@ public class PlayerHand : MonoBehaviour
     /* Designed in a coroutine way so that it is not bothered by frequent happen of events.*/
     // This part comes from chat gpt. I have absolutely no idea how it works.
     // (In fact, I'm just being lazy to interpret this. As long as it works it's fine.)
-    private void CollectObject()
+    private void InteractWithThisObject()
     {
         if (!_objectInRange || _isCollecting)
             return;
@@ -57,10 +57,12 @@ public class PlayerHand : MonoBehaviour
         else if(CheckIsAllowRelease())
         {
             // Release object.
+            EventCenterManager.Instance.EventTrigger(GameEvent.PlayerReleaseObject,_objectInRange);
             StopAllCoroutines();
             StartCoroutine(ReleaseCoroutine());
         }
     }
+    
 
     private IEnumerator CollectCoroutine()
     {
@@ -74,7 +76,7 @@ public class PlayerHand : MonoBehaviour
         _objectRigid.simulated = false;
         _objectInRange.transform.SetParent(gameObject.transform);
 
-        // Remove the event listener. Do not listen to outer object anymore.
+        // Remove ExistCollectable event listener. Do not listen to outer object anymore.
         EventCenterManager.Instance.RemoveEventListener<GameObject>(GameEvent.ExistCollectable, ObserveObject);
 
         yield return new WaitForSeconds(0.5f); // Wait for 0.5 sec
@@ -93,6 +95,7 @@ public class PlayerHand : MonoBehaviour
         _objectRigid.simulated = true;
         _objectInRange.transform.SetParent(null);
         
+
         // Clear variable.
         _objectInRange = null;
         _objectRigid = null;
@@ -102,6 +105,8 @@ public class PlayerHand : MonoBehaviour
         // Re-enable the event listener. 
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.ExistCollectable, ObserveObject);
         _isCollecting = false;
+        
+        
     }
 
     private void SetIsPlayerWithinInteractable(bool targetBoolValue)

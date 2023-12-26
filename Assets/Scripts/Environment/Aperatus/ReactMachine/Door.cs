@@ -84,13 +84,13 @@ public class Door : ReactMachine
         Vector3 targetPosition = isLetMachineEnable ? _openedPosition : _closedPosition;
         
         // Distance between current & target position.
-        float distance = Vector3.Distance(transform.position, targetPosition);
+        var distance = Vector3.Distance(transform.position, targetPosition);
         
         // Move
         while (distance > 0.01f)
         {
             // Distance to move each frame.
-            float step = moveSpeed * Time.deltaTime;
+            var step = moveSpeed * Time.deltaTime;
 
             // Position in the next frame. 
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);

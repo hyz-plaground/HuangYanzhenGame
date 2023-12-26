@@ -5,28 +5,44 @@ using UnityEngine;
 
 public class Collectable : MonoBehaviour
 {
-    private Rigidbody2D _rigid;
-    private void Start()
+    protected Rigidbody2D Rigid;
+    protected bool IsAllowCollect = true;
+
+    private void InitParams()
     {
-        _rigid = GetComponent<Rigidbody2D>();
+        IsAllowCollect = true;
+        Rigid = GetComponent<Rigidbody2D>();
+    }
+
+    private void InitDelegates()
+    {
         EventCenterManager.Instance.AddEventListener<bool>(GameEvent.CollectableEnterSpace,AdjustGravityScale);
+    }
+    
+    /// <summary>
+    /// Initialize rigid body, add an event listener to control gravity scale.
+    /// </summary>
+    protected void Start()
+    {
+        InitParams();
+        InitDelegates();
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
+        if ( IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
             EventCenterManager.Instance.EventTrigger(GameEvent.ExistCollectable,gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if(other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
+        if( IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
             EventCenterManager.Instance.EventTrigger(GameEvent.NonExistCollectable,gameObject);
     }
 
     private void AdjustGravityScale(bool isCollectableEnterSpace)
     {
-        _rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
+        Rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
     }
-    
+
 }

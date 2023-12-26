@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="Assets/Scripts/GlobalSettings/EntitySettings.cs" />
     <Compile Include="Assets/Scripts/Player/Player.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Lock/Lock.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Lock/MatchCode.cs" />
     <Compile Include="Assets/Scripts/Singleton/SingletonMono.cs" />
     <Compile Include="Assets/Scripts/GlobalSettings/MachineSettings.cs" />
     <Compile Include="Assets/Scripts/Environment/Object/Collectable.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/PressureButton.cs" />
     <Compile Include="Assets/Scripts/Singleton/SingletonMonoDontDestroy.cs" />
     <Compile Include="Assets/Scripts/EventCenter/EventList.cs" />
+    <Compile Include="Assets/Scripts/Environment/Object/Key.cs" />
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/ReactMachine.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/RegionalTriggers/EnvSpaceTrigger.cs" />
     <Compile Include="Assets/Scripts/Singleton/Singleton.cs" />

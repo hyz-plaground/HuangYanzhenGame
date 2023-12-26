@@ -27,6 +27,8 @@ public abstract class AtomicTrigger : MonoBehaviour
     /// </summary>
     protected void EnableReactMachine()
     {
+        if (!targetReactionObject)
+            return;
         EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredByButton, targetReactionObject, true);
     }
 
@@ -35,6 +37,8 @@ public abstract class AtomicTrigger : MonoBehaviour
     /// </summary>
     protected void DisableReactMachine()
     {
+        if (!targetReactionObject)
+            return;
         EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredByButton, targetReactionObject, false);
     }
 
@@ -43,6 +47,8 @@ public abstract class AtomicTrigger : MonoBehaviour
     /// </summary>
     protected void TriggerReactMachineIgnoreState()
     {
+        if (!targetReactionObject)
+            return;
         EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredBySwitch,targetReactionObject);
     }
     
