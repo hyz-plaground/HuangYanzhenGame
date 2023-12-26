@@ -16,7 +16,7 @@ public class Collectable : MonoBehaviour
 
     private void InitDelegates()
     {
-        EventCenterManager.Instance.AddEventListener<bool>(GameEvent.CollectableEnterSpace,AdjustGravityScale);
+        EventCenterManager.Instance.AddEventListener<Collider2D,bool>(GameEvent.CollectableEnterSpace,AdjustGravityScale);
     }
     
     /// <summary>
@@ -40,8 +40,10 @@ public class Collectable : MonoBehaviour
             EventCenterManager.Instance.EventTrigger(GameEvent.NonExistCollectable,gameObject);
     }
 
-    private void AdjustGravityScale(bool isCollectableEnterSpace)
+    private void AdjustGravityScale(Collider2D notifiedCollider, bool isCollectableEnterSpace)
     {
+        if (!ReferenceEquals(notifiedCollider.gameObject, gameObject))
+            return;
         Rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
     }
 

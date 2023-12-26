@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/GlobalSettings/EntitySettings.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/RegionalTriggers/RegionalTrigger.cs" />
     <Compile Include="Assets/Scripts/Player/Player.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Lock/Lock.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/Lock/MatchCode.cs" />
@@ -60,7 +61,9 @@
     <Compile Include="Assets/Scripts/EventCenter/EventManager.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/PressureButton.cs" />
     <Compile Include="Assets/Scripts/Singleton/SingletonMonoDontDestroy.cs" />
+    <Compile Include="Assets/Scripts/SceneManagement/SceneSwitchManager.cs" />
     <Compile Include="Assets/Scripts/EventCenter/EventList.cs" />
+    <Compile Include="Assets/Scripts/Environment/Triggers/RegionalTriggers/EnvSceneSwitchTrigger.cs" />
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/ReactMachine.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/RegionalTriggers/EnvSpaceTrigger.cs" />
     <Compile Include="Assets/Scripts/Singleton/Singleton.cs" />

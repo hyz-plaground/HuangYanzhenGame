@@ -2,29 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnvSpaceTrigger : MonoBehaviour
+public class EnvSpaceTrigger : RegionalTrigger
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    #region On Trigger Enter
+    protected override void DoPlayerEnterAction()
     {
-        if (other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
-        {
-            EventCenterManager.Instance.EventTrigger(GameEvent.PlayerEnterSpace, true);
-        }
-        else
-        {
-            EventCenterManager.Instance.EventTrigger(GameEvent.CollectableEnterSpace, true);
-        }
+        EventCenterManager.Instance.EventTrigger(GameEvent.PlayerEnterSpace, true);
     }
     
-    private void OnTriggerExit2D(Collider2D other)
+    protected override void DoObjectEnterAction(Collider2D other)
     {
-        if (other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
-        {
-            EventCenterManager.Instance.EventTrigger(GameEvent.PlayerEnterSpace, false);
-        }
-        else
-        {
-            EventCenterManager.Instance.EventTrigger(GameEvent.CollectableEnterSpace, false);
-        }
+        EventCenterManager.Instance.EventTrigger(GameEvent.CollectableEnterSpace, other,true);
     }
+    
+    #endregion
+
+    #region On Trigger Exit
+    protected override void DoPlayerExitAction()
+    {
+        EventCenterManager.Instance.EventTrigger(GameEvent.PlayerEnterSpace, false);
+    }
+
+    
+    protected override void DoObjectExitAction(Collider2D other)
+    {
+        EventCenterManager.Instance.EventTrigger(GameEvent.CollectableEnterSpace, other,false);
+    }
+    #endregion
 }

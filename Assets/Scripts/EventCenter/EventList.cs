@@ -5,6 +5,9 @@ public enum GameEvent
     PlayerTryInteract,
 
     #region Single Param
+    // Scene Switch
+    SwitchToAnotherScene,
+    
     // Player Property adjustments
     PlayerEnterSpace,
     PlayerGetHurt,
