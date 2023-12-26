@@ -10,7 +10,7 @@ public class EnvSceneSwitchTrigger : RegionalTrigger
             return;
         SceneSwitchManager.Instance.SwitchToScene(targetSceneName);
     }
-
+    
     protected override void DoPlayerExitAction()
     {
         

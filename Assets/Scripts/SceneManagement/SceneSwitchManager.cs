@@ -5,6 +5,9 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 
+/// <summary>
+/// Please please please please don't alter this. This works!!!!!
+/// </summary>
 public class SceneSwitchManager : SingletonMono<SceneSwitchManager>
 {
     private void Start()
@@ -25,7 +28,7 @@ public class SceneSwitchManager : SingletonMono<SceneSwitchManager>
             completed: (asyncOperation) =>
             {
                 // 在加载完成后的回调函数，你可以在这里执行其他操作
-                
+                //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
             },
             setActiveAfterCompleted: true
             );
@@ -66,12 +69,15 @@ public class SceneSwitchManager : SingletonMono<SceneSwitchManager>
         // 加载进度到达0.9后，我们人为将其设置为1，以方便外部进度条的显示
         loading?.Invoke(1);
 
+        // 允许场景激活
+        asyncOperation.allowSceneActivation = true;
+
         // 加载完成后的逻辑
         completed?.Invoke(asyncOperation);
 
         // 等待场景完全加载
         yield return asyncOperation;
-
+        
         // 如果设置为在加载完成后激活场景，则将场景设置为活跃状态
         if (setActiveAfterCompleted)
         {
@@ -80,6 +86,7 @@ public class SceneSwitchManager : SingletonMono<SceneSwitchManager>
             if (loadedScene.isLoaded)
             {
                 SceneManager.SetActiveScene(loadedScene);
+                Debug.Log("Scene " + sceneName + " loaded successfully.");
             }
             else
             {
@@ -87,8 +94,6 @@ public class SceneSwitchManager : SingletonMono<SceneSwitchManager>
             }
         }
 
-        // 允许场景激活
-        asyncOperation.allowSceneActivation = true;
         
     }
 }
