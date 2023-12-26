@@ -10,16 +10,26 @@ public class Key : Collectable
     public MatchCode keyMatchCode = MatchCode.DEF;
 
     private GameObject NearestLock { get; set; } // This should be unique.
+    private GameObject keyHolder;
+
+    private void InitParams()
+    {
+        var keyHolderTransform = transform.GetChild(0);
+        keyHolder = keyHolderTransform.gameObject;
+    }
+    
     private void InitDelegates()
     {
         EventCenterManager.Instance.AddEventListener<GameObject, MatchCode>(GameEvent.WithinRangeOfLock,ObserveLock);
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.OutOfRangeOfLock,IgnoreLock);
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.PlayerReleaseObject,OnPlayerRelease);
+        EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.PlayerCollectObject,DestroyKeyHolder);
     }
     
     private new void Start()
     {
         base.Start();
+        InitParams();
         InitDelegates();
     }
 
@@ -47,6 +57,20 @@ public class Key : Collectable
         keyMatchCode = targetMatchCode;
     }
 
+    #region Key Collected By Player
+
+    private void DestroyKeyHolder(GameObject collectedObject)
+    {
+        if (!ReferenceEquals(gameObject,collectedObject))
+            return;
+        DestroyImmediate(keyHolder);
+    }
+    
+
+    #endregion
+
+    #region Key Activate Lock
+    
     private void OnPlayerRelease(GameObject targetReleasedObject)
     {
         if (!targetReleasedObject || targetReleasedObject != gameObject || !NearestLock)
@@ -84,16 +108,20 @@ public class Key : Collectable
         
         DestroyImmediate(gameObject);
     }
-
+    
     private void PermanentlyBanCollect()
     {
         Rigid.simulated = false;
         transform.SetParent(NearestLock.transform);
         IsAllowCollect = false;
     }
-
+    
     private void OnDestroy()
     {
         EventCenterManager.Instance.EventTrigger(GameEvent.KeyInsertedInLock,keyMatchCode);
     }
+    
+    #endregion
+    
+    
 }

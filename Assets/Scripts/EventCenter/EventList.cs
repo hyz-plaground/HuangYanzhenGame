@@ -8,6 +8,7 @@ public enum GameEvent
     // Player Property adjustments
     PlayerEnterSpace,
     PlayerGetHurt,
+    PlayerCollectObject,
     PlayerReleaseObject,
     
     // React Machine Trigger

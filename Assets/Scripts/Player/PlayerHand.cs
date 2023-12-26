@@ -51,6 +51,7 @@ public class PlayerHand : MonoBehaviour
         if (!_isHandOccupied)
         {
             // Collect object.
+            EventCenterManager.Instance.EventTrigger(GameEvent.PlayerCollectObject, _objectInRange);
             StopAllCoroutines();
             StartCoroutine(CollectCoroutine());
         }
