@@ -64,7 +64,6 @@ public class PlayerHand : MonoBehaviour
         }
     }
     
-
     private IEnumerator CollectCoroutine()
     {
         _isCollecting = true;

@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneSwitchManager : SingletonMono<SceneSwitchManager>
 {
-    private void Start()
+    private void Awake()
     {
         //EventCenterManager.Instance.AddEventListener<string>(GameEvent.SwitchToAnotherScene,SwitchToScene);
     }

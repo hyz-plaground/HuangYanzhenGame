@@ -115,7 +115,13 @@ public class Key : Collectable
         transform.SetParent(NearestLock.transform);
         IsAllowCollect = false;
     }
-    
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        // Shouldn't use DestroyImmediate here.
+        Destroy(keyHolder);
+    }
+
     private void OnDestroy()
     {
         EventCenterManager.Instance.EventTrigger(GameEvent.KeyInsertedInLock,keyMatchCode);
