@@ -13,12 +13,12 @@ public class InteractButton : AtomicTrigger
     [SerializeField] 
     public int countdownSeconds = 5;
 
-    protected override void PlayerEnterAction()
+    protected override void DoPlayerEnterAction()
     {
         EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, PerformEnableReactMachineCycle);
     }
     
-    protected override void PlayerExitAction()
+    protected override void DoPlayerExitAction()
     {
         EventCenterManager.Instance.RemoveEventListener(GameEvent.PlayerTryInteract, PerformEnableReactMachineCycle);
     }
@@ -27,7 +27,7 @@ public class InteractButton : AtomicTrigger
     /* Enable-countdown-Disable method. Uses coroutine.*/
     private void PerformEnableReactMachineCycle()
     {
-        StopCoroutine(PerformEnableReactMachineCycleCoroutine());
+        StopAllCoroutines();
         StartCoroutine(PerformEnableReactMachineCycleCoroutine());
     }
 

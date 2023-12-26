@@ -12,6 +12,7 @@ public class PressureButton : AtomicTrigger
     private void InitButtonPosition()
     {
         _button = transform.GetChild(0);
+        /* If the prefab is damaged, this will catch an exception. */
         try
         {
             _releasePosition = _button.position;
@@ -25,6 +26,7 @@ public class PressureButton : AtomicTrigger
 
     private void InitParams()
     {
+        // We want players to be able to drop objects on pressure buttons.
         SetUsePlayerInteractRange(false);
     }
 
@@ -60,7 +62,8 @@ public class PressureButton : AtomicTrigger
         }
     }
     
-    protected override void PlayerEnterAction()
+    /* Player enters/stays in button collider, do animation & enable the machine. */
+    protected override void DoPlayerEnterAction()
     {
         StopAllCoroutines();
         StartCoroutine(DoButtonPressOrReleaseAnimation(true));
@@ -68,7 +71,8 @@ public class PressureButton : AtomicTrigger
         EnableReactMachine();   // Enable the react machine.
     }
 
-    protected override void PlayerExitAction()
+    /* Player exits button collider, do animation & disable the machine. */
+    protected override void DoPlayerExitAction()
     {
         // Play animation.
         StopAllCoroutines();

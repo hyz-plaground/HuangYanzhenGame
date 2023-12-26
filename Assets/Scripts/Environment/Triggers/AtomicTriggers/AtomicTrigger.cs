@@ -2,18 +2,22 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 /// <summary>
-/// AtomicTrigger is just an abstract class defined for the concept "Button" and Switch. Button can be interpreted in
+/// AtomicTrigger is an abstract class defined for the concept "Button" and Switch. Button can be interpreted in
 /// many ways: A pressure button, or a player interactable button using F key. This abstract class only
-/// defines two ways of Enabling, Disabling &amp; Triggering the target react machine. The detailed condition of when or how to
+/// defines  ways of Enabling, Disabling &amp; Triggering the target react machine. The detailed condition of when or how to
 /// do this is described in its inheritors.
+/// <param name="usePlayerInteractRange">
+/// If set to true, this apparatus will trigger WithinRangeOfInteractable event.
+/// Such that player can not drop items during its staying in this range.
+/// </param>
 /// </summary>
 public abstract class AtomicTrigger : MonoBehaviour
 {
     /* This is the target react machine. Done in unity editor or assigned by others.*/
     [SerializeField]
     public GameObject targetReactionObject;
-
-     public bool usePlayerInteractRange = true;
+    
+    public bool usePlayerInteractRange = true;
 
     #region React Machine State
     
@@ -53,7 +57,7 @@ public abstract class AtomicTrigger : MonoBehaviour
         {
             EventCenterManager.Instance.EventTrigger<bool>(GameEvent.WithinRangeOfInteractable, true);
         }
-        PlayerEnterAction();
+        DoPlayerEnterAction();
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -64,8 +68,13 @@ public abstract class AtomicTrigger : MonoBehaviour
         {
             EventCenterManager.Instance.EventTrigger<bool>(GameEvent.WithinRangeOfInteractable, false);
         }
-        PlayerExitAction();
+        DoPlayerExitAction();
     }
+
+    #region Set and Check usePlayerInteractRange
+
+    
+
 
     private bool CheckUsePlayerInteractRange()
     {
@@ -76,10 +85,18 @@ public abstract class AtomicTrigger : MonoBehaviour
     {
         usePlayerInteractRange = targetBoolValue;
     }
-
     #endregion
     
-    protected abstract void PlayerEnterAction();
-    protected abstract void PlayerExitAction();
+    #endregion
+    
+    /// <summary>
+    /// What to do when player enters (stays in) the collision trigger of the apparatus.
+    /// </summary>
+    protected abstract void DoPlayerEnterAction();
+    
+    /// <summary>
+    /// What to do when player exits the collision trigger of the apparatus.
+    /// </summary>
+    protected abstract void DoPlayerExitAction();
 
 }
