@@ -55,10 +55,13 @@ public class Door : ReactMachine
     protected override void React(GameObject triggerTarget)
     {
         // Guardian: If the reference is not self, don't act!
-        if (!ReferenceEquals(triggerTarget, gameObject))
+        if (triggerTarget != gameObject)
             return;
         
+        // Reverse state.
         _isOpen = !_isOpen;
+        
+        // Perform action.
         StopAllCoroutines();
         StartCoroutine(DoorMove(_isOpen));
     }
@@ -67,7 +70,7 @@ public class Door : ReactMachine
     protected override void React(GameObject triggerTarget, bool isLetMachineEnable)
     {
         // Guardian: If the reference is not self, don't act!
-        if (!ReferenceEquals(triggerTarget, gameObject))
+        if (triggerTarget != gameObject)
             return;
             
         // Synchronize states

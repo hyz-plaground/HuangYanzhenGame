@@ -49,7 +49,7 @@ public class Key : Collectable
 
     private void OnPlayerRelease(GameObject targetReleasedObject)
     {
-        if (!targetReleasedObject || targetReleasedObject != gameObject)
+        if (!targetReleasedObject || targetReleasedObject != gameObject || !NearestLock)
             return;
         
         Vector3 nearestLockPosition = NearestLock.transform.position;

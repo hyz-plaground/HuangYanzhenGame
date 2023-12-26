@@ -8,17 +8,17 @@ using UnityEngine.Serialization;
 public abstract class ReactMachine : MonoBehaviour
 {
     [SerializeField] 
-    public bool useButtonAsTrigger;
+    public bool triggeredBySpecificValue;
         
     protected void Start()
     {
-        if (useButtonAsTrigger)
+        if (triggeredBySpecificValue)
         {
-            EventCenterManager.Instance.AddEventListener<GameObject, bool>(GameEvent.MachineTriggeredByButton, React);
+            EventCenterManager.Instance.AddEventListener<GameObject, bool>(GameEvent.MachineTriggeredSpecific, React);
         }
         else
         {
-            EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.MachineTriggeredBySwitch, React);
+            EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.MachineTriggered, React);
         }
        
     }

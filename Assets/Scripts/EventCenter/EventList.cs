@@ -11,7 +11,7 @@ public enum GameEvent
     PlayerReleaseObject,
     
     // React Machine Trigger
-    MachineTriggeredBySwitch,
+    MachineTriggered,
     
     // Collectable 
     ExistCollectable,
@@ -28,6 +28,6 @@ public enum GameEvent
 
     #region Double Param
     // React Machine Trigger
-    MachineTriggeredByButton,
+    MachineTriggeredSpecific,
     #endregion
 }

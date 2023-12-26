@@ -55,6 +55,7 @@
     <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/Door.cs" />
     <Compile Include="Assets/Scripts/Player/PlayerHand.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/AtomicTrigger.cs" />
+    <Compile Include="Assets/Scripts/Environment/Aperatus/ReactMachine/MergeSignalGate.cs" />
     <Compile Include="Assets/Scripts/EventCenter/EventManager.cs" />
     <Compile Include="Assets/Scripts/Environment/Triggers/AtomicTriggers/PressureButton.cs" />
     <Compile Include="Assets/Scripts/Singleton/SingletonMonoDontDestroy.cs" />

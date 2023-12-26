@@ -31,7 +31,7 @@ public abstract class AtomicTrigger : MonoBehaviour
     {
         if (!targetReactionObject)
             return;
-        EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredByButton, targetReactionObject, true);
+        EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredSpecific, targetReactionObject, true);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public abstract class AtomicTrigger : MonoBehaviour
     {
         if (!targetReactionObject)
             return;
-        EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredByButton, targetReactionObject, false);
+        EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredSpecific, targetReactionObject, false);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public abstract class AtomicTrigger : MonoBehaviour
     {
         if (!targetReactionObject)
             return;
-        EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggeredBySwitch,targetReactionObject);
+        EventCenterManager.Instance.EventTrigger(GameEvent.MachineTriggered,targetReactionObject);
     }
     
     #endregion
