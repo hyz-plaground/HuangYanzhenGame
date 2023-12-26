@@ -50,7 +50,7 @@ public class Key : Collectable
     private void OnPlayerRelease(GameObject targetReleasedObject)
     {
         if (!targetReleasedObject || targetReleasedObject != gameObject)
-            Debug.Log("This is normal, everything is fine!!!!!");
+            return;
         
         Vector3 nearestLockPosition = NearestLock.transform.position;
         

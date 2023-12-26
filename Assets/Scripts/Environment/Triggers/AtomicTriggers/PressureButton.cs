@@ -28,6 +28,7 @@ public class PressureButton : AtomicTrigger
     {
         // We want players to be able to drop objects on pressure buttons.
         SetUsePlayerInteractRange(false);
+        SetIsAcceptAnyEntryType(true);
     }
 
     private void Start()

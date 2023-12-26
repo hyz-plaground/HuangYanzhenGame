@@ -19,6 +19,8 @@ public abstract class AtomicTrigger : MonoBehaviour
     public GameObject targetReactionObject;
     
     public bool usePlayerInteractRange = true;
+    
+    private bool isAcceptAnyEntryType = false;
 
     #region React Machine State
     
@@ -58,39 +60,48 @@ public abstract class AtomicTrigger : MonoBehaviour
     #region Detect Player in Range
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
+        if (!other.CompareTag(PlayerProperties.Instance.PLAYER_TAG) && !isAcceptAnyEntryType)
             return;
+        
         if (CheckUsePlayerInteractRange())
-        {
             EventCenterManager.Instance.EventTrigger<bool>(GameEvent.WithinRangeOfInteractable, true);
-        }
+        
         DoPlayerEnterAction();
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (!other.CompareTag(PlayerProperties.Instance.PLAYER_TAG) && CheckUsePlayerInteractRange())
+        if (!other.CompareTag(PlayerProperties.Instance.PLAYER_TAG) && !isAcceptAnyEntryType)
             return;
+        
         if (CheckUsePlayerInteractRange())
-        {
             EventCenterManager.Instance.EventTrigger<bool>(GameEvent.WithinRangeOfInteractable, false);
-        }
+        
         DoPlayerExitAction();
     }
 
-    #region Set and Check usePlayerInteractRange
-
-    
-
-
+    #region Set and Check 
     private bool CheckUsePlayerInteractRange()
     {
         return usePlayerInteractRange;
     }
 
+
     protected void SetUsePlayerInteractRange(bool targetBoolValue)
     {
         usePlayerInteractRange = targetBoolValue;
+    }
+
+    /// <summary>
+    /// Some collider triggers only accept player, while others can accept anything.
+    /// For example, a pressure button accepts anything. However, a trigger only accepts player.
+    /// Whether an object (collider) is a player is defined by tag.
+    /// <param name="targetBoolValue"> Target bool value. Default false. Can manually set to true
+    /// if required. </param>
+    /// </summary>
+    protected void SetIsAcceptAnyEntryType(bool targetBoolValue)
+    {
+        isAcceptAnyEntryType = targetBoolValue;
     }
     #endregion
     
