@@ -1162,7 +1162,7 @@ GameObject:
   - component: {fileID: 1590300728}
   - component: {fileID: 1590300727}
   - component: {fileID: 1590300726}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ceiling
   m_TagString: ENV_GROUND
   m_Icon: {fileID: 0}
@@ -1519,7 +1519,7 @@ GameObject:
   - component: {fileID: 1904281711}
   - component: {fileID: 1904281710}
   - component: {fileID: 1904281709}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Floor
   m_TagString: ENV_GROUND
   m_Icon: {fileID: 0}

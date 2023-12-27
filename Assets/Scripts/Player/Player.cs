@@ -13,29 +13,41 @@ public class Player : MonoBehaviour
     [SerializeField]
     // Debug Settings
     public bool showDebugMessage = false;
+    public Collider2D playerCollider;
     
     // Player's main rigid body
     private Rigidbody2D _rigid;
+    
 
     // Player Movement
+    [Header("Basic Player Movement")]
     public float moveSpeed = PlayerProperties.Instance.PLAYER_DEFAULT_MOVE_SPEED;
     public float jumpSpeed = PlayerProperties.Instance.PLAYER_DEFAULT_JUMP_SPEED;
     public float rushSpeed = PlayerProperties.Instance.PLAYER_DEFAULT_RUSH_SPEED;
-    public string groundTag = PlayerProperties.Instance.PLAYER_GROUND_TAG;         // Ground Detection
     
-    // Static Player Properties
-    public float groundDetectionRaycastDistance = PlayerProperties.Instance.PLAYER_GROUND_DETECTION_RACAST_DISTANCE;
+    [Header("Detailed Player Movement")]
     public float rushCD = PlayerProperties.Instance.PLAYER_DEFAULT_RUSH_CD;
     public bool haveRushCD = false;
+    public float maxAllowCoyoteTime = PlayerProperties.Instance.PLAYER_MAX_ALLOW_COYOTE_TIME;   //离开地面后的最大土狼时间
     public float maxGravityScale = PlayerProperties.Instance.PLAYER_MAX_GRAVITY_SCALE;
+    
+    // Static Player Properties
+    [Header("Ground Detection")]
+    public string groundLayerMask = PlayerProperties.Instance.PLAYER_GROUND_LAYER_MASK;         // Ground Detection
+    public float groundDetectionRaycastDistance = PlayerProperties.Instance.PLAYER_GROUND_DETECTION_RAYCAST_MAX_DISTANCE;
+    public float raycastUpPosition = PlayerProperties.Instance.PLAYER_GROUND_DETECTION_RAYCAST_UP_POSITION;
+    public float raycastMaxDistance = PlayerProperties.Instance.PLAYER_GROUND_DETECTION_RAYCAST_MAX_DISTANCE;
+    
+    [Header("Player Life")]
     public int maxLife = PlayerProperties.Instance.PLAYER_DEFAULT_MAX_LIFE;
     public float fallDamageSpeedThreshold = PlayerProperties.Instance.PLAYER_FALL_DAMAGE_THRESHOLD;
 
+    
     // Dynamic Player variables.
     private bool _isFaceTowardsRight = true;
     private bool _isSpaceGravity = false;
-    private bool _isOnGround;
-    private float _rushTimeInterval;
+    private float _timeAfterLastRushed;
+    private float _remainingAllowCoyoteTime;  //土狼
     private int _currentLife;
     
     // Delegates
@@ -44,34 +56,37 @@ public class Player : MonoBehaviour
     void InitParams()
     {
         _rigid = GetComponent<Rigidbody2D>();
-        _rushTimeInterval = rushCD;     // Full rush interval, allowing player to rush.
+        playerCollider = GetComponent<Collider2D>();
+        _timeAfterLastRushed = rushCD;
+        _remainingAllowCoyoteTime = 0;
         _isFaceTowardsRight = true;     // Initialize player face to right.
         _isSpaceGravity = false;        // Initialize player gravity.
         _currentLife = maxLife;         // Maximizes player life.
     }
 
     // Initialize event listeners.
-    void InitDelegates()
+    private void InitDelegates()
     {
         EventCenterManager.Instance.AddEventListener<bool>(GameEvent.PlayerEnterSpace, TriggerSpaceGravityRegion);
         EventCenterManager.Instance.AddEventListener<int>(GameEvent.PlayerGetHurt, GetHurt);
         EventCenterManager.Instance.AddEventListener(GameEvent.PlayerDie,Die);
     }
     
-    void Start()
+    private void Start()
     {
         InitParams();       // Initialize player properties.
         InitDelegates();    // Initialize event listeners.
     }
     
-    void Update()
+    private void Update()
     {
-        Move();
         Timer();
+        Move();
         AdjustPropertyConstantly();
-        PassiveSenseEnvironment();
+        //PassiveSenseEnvironment();
     }
     
+
     #region Movement
     
     /* Player movements.*/
@@ -79,25 +94,24 @@ public class Player : MonoBehaviour
     {
         /* Get WASD inputs */
         // TODO: Get these inputs into configuration file.
-        float xInput = Input.GetAxis("Horizontal");
-        bool jumpInput = Input.GetKey(KeyCode.Space);
-        bool flyInput = Input.GetKeyDown(KeyCode.Space);
-        bool rushInput = Input.GetKey(KeyCode.R);
-        bool interactInput = Input.GetKey(KeyCode.F);
+        var xInput = Input.GetAxis("Horizontal");
+        var jumpInput = Input.GetKey(KeyCode.Space);
+        var flyInput = Input.GetKeyDown(KeyCode.Space);
+        var rushInput = Input.GetKey(KeyCode.R);
+        var interactInput = Input.GetKey(KeyCode.F);
         
         // Control Facing Direction
         _isFaceTowardsRight = xInput != 0 ? xInput >= 0 : _isFaceTowardsRight;
         
         /* Calculate player movements based on inputs.*/
         // Horizontal Movements
-        float xMove = 0;
-        if (xInput != 0)
+        var xMove = xInput * moveSpeed;
+        
+        if (rushInput && CheckAllowRush())
         {
-            xMove = CheckIntendRush(rushInput) ? xInput * rushSpeed : xInput * moveSpeed;
-        }
-        else if (CheckIntendRush(rushInput))
-        {
+            Debug.Log("Rush");
             xMove = _isFaceTowardsRight ? rushSpeed : -rushSpeed;
+            _timeAfterLastRushed = 0;
         }
         
         // Vertical Movements
@@ -108,6 +122,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            TrySetAllowCoyote();
             jumpMove = CheckAllowJump() && jumpInput? jumpSpeed : _rigid.velocity.y;
         }
         
@@ -123,32 +138,42 @@ public class Player : MonoBehaviour
     /// Checks whether the player is allowed to jump. Box ray detect if on ground.
     /// </summary>
     /// <returns></returns>
-    bool CheckAllowJump()
+    private bool CheckAllowJump()
     {
-        return CheckGround();
+        // return CheckGround();
+        return ThreeHitGroundCheck() >= 1 || CheckAllowCoyote();
     }
 
+    private bool CheckAllowCoyote()
+    {
+        if (ThreeHitGroundCheck() >= 1) // Player is on the ground, obviously not allow.
+            return false;
+        return _remainingAllowCoyoteTime > 0;
+    }
+
+    private void TrySetAllowCoyote()
+    {
+        if (ThreeHitGroundCheck() == 2)
+        {
+            // Player Jumps from the edge
+            _remainingAllowCoyoteTime = maxAllowCoyoteTime;
+        }
+    }
     /// <summary>
     /// Checks whether the player is allowed to rush.
     /// <param name="isRushKeyPressed"> Input a key detection of rush key.</param>
     /// </summary>
     /// <returns> A boolean value noting if it is allowed to rush.</returns>
-    bool CheckIntendRush(bool isRushKeyPressed)
+    private bool CheckAllowRush()
     {
-        bool isAfterRunCD = _rushTimeInterval >= rushCD;
-        bool isAllowRush = (isAfterRunCD || !haveRushCD) && isRushKeyPressed;
-        
-        if(isAllowRush)
-            _rushTimeInterval = 0;
-        
-        return isAllowRush;
+        return !haveRushCD || _timeAfterLastRushed >= rushCD;
     }
     
     /// <summary>
     /// Checks whether the player is allowed to fly.
     /// </summary>
     /// <returns></returns>
-    bool CheckAllowFly()
+    private bool CheckAllowFly()
     {
         return _isSpaceGravity;
     }
@@ -157,7 +182,7 @@ public class Player : MonoBehaviour
     /// Player interact with environment.
     /// </summary>
     /// <param name="isIntendInteract"></param>
-    void Interact(bool isIntendInteract)
+    private void Interact(bool isIntendInteract)
     {
         if (!isIntendInteract)
             return;
@@ -174,6 +199,10 @@ public class Player : MonoBehaviour
     }
 
     // Check whether the character is on ground. Use box ray cast.
+    /// <summary>
+    /// This is deprecated. Don't use.
+    /// </summary>
+    /// <returns></returns>
     bool CheckGround()
     {
         // Ray detection part.
@@ -181,10 +210,48 @@ public class Player : MonoBehaviour
         Vector2 boxSize = new Vector2(Math.Abs(transform.localScale.x), groundDetectionRaycastDistance);
         Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y - 1.2f);
         RaycastHit2D hit = Physics2D.BoxCast(boxCenter, boxSize, 0f, Vector2.down, groundDetectionRaycastDistance);
-        return hit.collider && hit.collider.CompareTag(groundTag);
+        return hit.collider && hit.collider.CompareTag(groundLayerMask);
+    }
+
+    private int ThreeHitGroundCheck(float upPosition = -0.5f, float maxDistance = 0.8f)
+    {
+        var objLength = ColliderSizeJudge(playerCollider).x;
+        List<RaycastHit2D> hits = new List<RaycastHit2D>();
+        
+        RaycastHit2D firstHit = Physics2D.Raycast(
+            transform.position + raycastUpPosition * transform.up,
+            -Vector3.up, 
+            raycastMaxDistance,
+            LayerMask.GetMask("Ground")
+            );
+        if(firstHit.transform) hits.Add(firstHit);
+        
+        RaycastHit2D secondHit = Physics2D.Raycast(
+            transform.position + raycastUpPosition * transform.up + 0.8f * objLength / 1.5f * Vector3.right, 
+            -Vector3.up, 
+            raycastMaxDistance, 
+            LayerMask.GetMask("Ground")
+            );
+        if(secondHit.transform) hits.Add(secondHit);
+        
+        RaycastHit2D thirdHit = Physics2D.Raycast(
+            transform.position + raycastUpPosition * transform.up - 0.8f * objLength / 1.5f * Vector3.right,
+            -Vector3.up, 
+            raycastMaxDistance, 
+            LayerMask.GetMask("Ground")
+            );
+        if(thirdHit.transform) hits.Add(thirdHit);
+
+        return hits.Count;
+
     }
     
+    private static Vector3 ColliderSizeJudge(Collider2D collider2D)
+    {
+        return new Vector3(collider2D.bounds.size.x, collider2D.bounds.size.y, collider2D.bounds.size.z);
+    }
 
+    
     #endregion
     
     #region Constant Property Adjustments
@@ -281,21 +348,66 @@ public class Player : MonoBehaviour
     #endregion
     
     #region Timer
-    void Timer()
+    private void Timer()
     {
-        if(_rushTimeInterval < rushCD)
-            _rushTimeInterval += Time.deltaTime;
+        RushCountDown();
+        CoyoteCountDown();
+    }
+
+    private void RushCountDown()
+    {
+        if(_timeAfterLastRushed < rushCD)
+            _timeAfterLastRushed += Time.deltaTime;
+    }
+
+    private void CoyoteCountDown()
+    {
+        if (_remainingAllowCoyoteTime <= 0)
+        {
+            _remainingAllowCoyoteTime = 0;
+            return;
+        }
+        
+        _remainingAllowCoyoteTime -= Time.deltaTime;
     }
     #endregion
     
     #region Visualization
     // Draw the ray cast in Unity Editor.
-    void OnDrawGizmos()
+    /// <summary>
+    /// This is deprecated.
+    /// </summary>
+    void OnDrawGizmosNoUse()
     {
         Vector2 boxSize = new Vector2(transform.localScale.x, groundDetectionRaycastDistance);
         Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y - 1.2f);
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
+    
+    private void OnDrawGizmos()
+    {
+        //float upPosition = -0.5f;
+        //float maxDistance = 0.8f;
+        var objLength = ColliderSizeJudge(playerCollider).x;
+
+        // First Raycast
+        Gizmos.color = Color.green;
+        Vector2 startPos = transform.position + raycastUpPosition * transform.up;
+        Vector2 endPos = startPos + -Vector2.up * raycastMaxDistance;
+        Gizmos.DrawLine(startPos, endPos);
+
+        // Second Raycast
+        Gizmos.color = Color.blue;
+        startPos = transform.position + raycastUpPosition * transform.up + 0.8f * objLength / 1.5f * Vector3.right;
+        endPos = startPos + -Vector2.up * raycastMaxDistance;
+        Gizmos.DrawLine(startPos, endPos);
+
+        // Third Raycast
+        Gizmos.color = Color.red;
+        startPos = transform.position + raycastUpPosition * transform.up - 0.8f * objLength / 1.5f * Vector3.right;
+        endPos = startPos + -Vector2.up * raycastMaxDistance;
+        Gizmos.DrawLine(startPos, endPos);
     }
     
     #endregion
