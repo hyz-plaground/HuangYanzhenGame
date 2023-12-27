@@ -4,3 +4,4 @@ UserSettings/
 .idea/
 obj/
 Temp/
+*.csproj
