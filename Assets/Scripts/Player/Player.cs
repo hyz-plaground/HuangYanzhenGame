@@ -22,7 +22,8 @@ namespace Player
         private Rigidbody2D _rigid;
 
         // Environment Awareness
-        private readonly EnvAware _envAware = new EnvAware();
+        private EnvAware _envAware;
+        private Movements _movements;
 
         // Player Movement
         [Header("Basic Player Movement")] public float moveSpeed = PlayerProperties.Instance.PLAYER_DEFAULT_MOVE_SPEED;
@@ -65,6 +66,9 @@ namespace Player
         // Initialize parameters.
         void InitParams()
         {
+            _envAware = new EnvAware();
+            _movements = new Movements(_envAware, playerCollider, transform, moveSpeed);
+            
             _rigid = GetComponent<Rigidbody2D>();
             playerCollider = GetComponent<Collider2D>();
             //_timeAfterLastRushed = rushCD;
@@ -116,7 +120,7 @@ namespace Player
             // Horizontal Movements
             var xMove = xInput * moveSpeed;
 
-            if (rushInput && CheckAllowRush())
+            if (rushInput && _movements.CheckAllow("rush")(_isRushing))
             {
                 _isRushing = true;
                 xMove = xMove == 0
@@ -128,14 +132,14 @@ namespace Player
 
             // Vertical Movements
             float jumpMove;
-            if (CheckAllowFly())
+            if (_movements.CheckAllow("fly")(_isSpaceGravity))
             {
                 jumpMove = flyInput ? moveSpeed : _rigid.velocity.y - 10f * Time.deltaTime;
             }
             else
             {
                 TrySetAllowCoyote();
-                jumpMove = CheckAllowJump() && jumpInput ? jumpSpeed : _rigid.velocity.y;
+                jumpMove = _movements.CheckAllow("jump")(_remainingAllowCoyoteTime) && jumpInput ? jumpSpeed : _rigid.velocity.y;
             }
 
             /* Perform moving. */
@@ -144,17 +148,7 @@ namespace Player
             /* Check player interaction. */
             Interact(interactInput);
         }
-
-        /// <summary>
-        /// Checks whether the player is allowed to jump. Box ray detect if on ground.
-        /// </summary>
-        /// <returns></returns>
-        private bool CheckAllowJump()
-        {
-            return _envAware.groundCheck.ThreeHitGroundCheck(playerCollider, transform) >= 1 || // Player on ground
-                   _remainingAllowCoyoteTime > 0; // Allow coyote
-        }
-
+        
         private void TrySetAllowCoyote()
         {
             if (_envAware.groundCheck.ThreeHitGroundCheck(playerCollider, transform) == 2)
@@ -164,32 +158,31 @@ namespace Player
             }
         }
 
-        /// <summary>
-        /// Checks whether the player is allowed to rush.
-        /// <param name="isRushKeyPressed"> Input a key detection of rush key.</param>
-        /// </summary>
-        /// <returns> A boolean value noting if it is allowed to rush.</returns>
-        private bool CheckAllowRush()
+        private bool CheckAllow(string item)
         {
-            if (_isRushing)
+            // Func<bool> checkFunc;
+            Dictionary<string, Func<bool>> checkFunc = new Dictionary<string, Func<bool>>
             {
-                return Time.time - _timeSinceLastRushed > rushCD;
-            }
-            else
-            {
-                return Time.time - _timeSinceLastRushed > rushCD;
-            }
-            return !_isRushing;
-        }
+                {
+                    "jump",
+                    () => _envAware
+                              .groundCheck
+                              .ThreeHitGroundCheck(playerCollider, transform) >= 1 || // Player on ground
+                          _remainingAllowCoyoteTime > 0 // Allow coyote'
+                },
+                {
+                    "rush",
+                    () => !_isRushing
+                },
+                {
+                    "fly",
+                    () => _isSpaceGravity
+                }
+            };
 
-        /// <summary>
-        /// Checks whether the player is allowed to fly.
-        /// </summary>
-        /// <returns></returns>
-        private bool CheckAllowFly()
-        {
-            return _isSpaceGravity;
+            return checkFunc[item]();
         }
+        
 
         /// <summary>
         /// Player interact with environment.
@@ -205,26 +198,6 @@ namespace Player
         #endregion
 
         #region Environment Awareness
-
-        void PassiveSenseEnvironment()
-        {
-            return;
-        }
-
-        // Check whether the character is on ground. Use box ray cast.
-        /// <summary>
-        /// This is deprecated. Don't use.
-        /// </summary>
-        /// <returns></returns>
-        bool CheckGround()
-        {
-            // Ray detection part.
-            // Box width align to player's width. It's center at lower of player.
-            Vector2 boxSize = new Vector2(Math.Abs(transform.localScale.x), groundDetectionRaycastDistance);
-            Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y - 1.2f);
-            RaycastHit2D hit = Physics2D.BoxCast(boxCenter, boxSize, 0f, Vector2.down, groundDetectionRaycastDistance);
-            return hit.collider && hit.collider.CompareTag(groundLayerMask);
-        }
 
         private static Vector3 ColliderSizeJudge(Collider2D collider2D)
         {
