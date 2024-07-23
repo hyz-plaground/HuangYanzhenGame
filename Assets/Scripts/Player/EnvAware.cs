@@ -24,7 +24,7 @@ namespace Player
         private static readonly PlayerProperties Prop = PlayerProperties.Instance;
         private readonly float _rayCastUpPosition = Prop.PLAYER_GROUND_DETECTION_RAYCAST_UP_POSITION;
         private readonly float _rayCastMaxDistance = Prop.PLAYER_GROUND_DETECTION_RAYCAST_MAX_DISTANCE;
-        
+
         /// <summary>
         /// Get the collider size.
         /// </summary>
@@ -94,7 +94,7 @@ namespace Player
 
             return hitNum;
         }
-        
+
         /// <summary>
         /// Draw the ray cast in Unity Editor.
         /// </summary>
@@ -132,7 +132,7 @@ namespace Player
         {
             ObservedObj = thisObject;
             ObservedObjRigid = thisObject.GetComponent<Rigidbody2D>();
-            Debug.Log($"Observed {thisObject.name}");
+            Debug.Log($"Observed {thisObject.name}. ObservedObj={ObservedObj.name}");
         }
 
         /// <summary>
@@ -141,9 +141,9 @@ namespace Player
         /// <param name="thisObject"> The object ignored. </param>
         public void IgnoreObject(GameObject thisObject)
         {
-            // if (thisObject == _objectInRange && !_isHandOccupied)
-            //     _objectInRange = null;
-            Debug.Log($"Ignored {thisObject.name}");
+            if (thisObject == ObservedObj && !ObservedObj.transform.parent)
+                ObservedObj = null;
+            Debug.Log($"Ignored {thisObject.name}. ObservedObj={(ObservedObj ? ObservedObj.name : "None")}");
         }
     }
 }

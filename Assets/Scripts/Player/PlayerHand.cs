@@ -58,7 +58,7 @@ public class PlayerHand : MonoBehaviour
         }
         else if (CheckIsAllowRelease()) // Release object.
         {
-            Do(GameEvent.PlayerCollectObject, _observer.ObservedObj, ReleaseCoroutine);
+            Do(GameEvent.PlayerReleaseObject, _observer.ObservedObj, ReleaseCoroutine);
         }
     }
 
@@ -110,6 +110,11 @@ public class PlayerHand : MonoBehaviour
         _isPlayerWithinRangeOfInteractable = targetBoolValue;
     }
 
+    /// <summary>
+    /// If player is in the range of an interactable (e.g., A button),
+    /// it can't release the collectable in its hand.
+    /// </summary>
+    /// <returns></returns>
     private bool CheckIsAllowRelease()
     {
         return !_isPlayerWithinRangeOfInteractable;

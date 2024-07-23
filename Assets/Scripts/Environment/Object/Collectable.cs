@@ -28,7 +28,7 @@ public class Collectable : MonoBehaviour
         InitDelegates();
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if ( IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
             EventCenterManager.Instance.EventTrigger(GameEvent.ExistCollectable,gameObject);

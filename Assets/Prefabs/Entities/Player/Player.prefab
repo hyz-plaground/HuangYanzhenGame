@@ -54,6 +54,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -97,6 +99,7 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3724867028758642737}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -120,8 +123,9 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.08367276, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -131,8 +135,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 1.1673455, y: 2}
   m_EdgeRadius: 0
 --- !u!50 &3724867028758642738
 Rigidbody2D:
@@ -173,18 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bacbd5b0bc8fb4a0cac78aacbc5c6e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugMessage: 0
   playerCollider: {fileID: 3724867028758642739}
-  moveSpeed: 10
-  jumpSpeed: 10
-  rushSpeed: 40
-  groundTag: ENV_GROUND
-  groundDetectionRaycastDistance: 0.2
-  rushCD: 1
-  haveRushCD: 0
-  maxGravityScale: 5
-  maxLife: 256
-  fallDamageSpeedThreshold: 5
 --- !u!1 &3724867029253883951
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +226,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
