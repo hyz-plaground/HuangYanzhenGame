@@ -12,6 +12,7 @@ namespace Player
     public class EnvAware
     {
         public readonly GroundCheck GroundCheck = new GroundCheck();
+        public readonly Observer Observer = new Observer();
     };
 
     /// <summary>
@@ -120,17 +121,17 @@ namespace Player
     /// </summary>
     public class Observer
     {
-        private GameObject _objectInRange;
-        private Rigidbody2D _objectRigid;
+        public GameObject ObservedObj;
+        public Rigidbody2D ObservedObjRigid;
 
         /// <summary>
         /// Player observes an object.
         /// </summary>
         /// <param name="thisObject"> The object observed. </param>
-        private void ObserveObject(GameObject thisObject)
+        public void ObserveObject(GameObject thisObject)
         {
-            _objectInRange = thisObject;
-            _objectRigid = thisObject.GetComponent<Rigidbody2D>();
+            ObservedObj = thisObject;
+            ObservedObjRigid = thisObject.GetComponent<Rigidbody2D>();
             Debug.Log($"Observed {thisObject.name}");
         }
 
@@ -138,7 +139,7 @@ namespace Player
         /// Player ignores an object.
         /// </summary>
         /// <param name="thisObject"> The object ignored. </param>
-        private void IgnoreObject(GameObject thisObject)
+        public void IgnoreObject(GameObject thisObject)
         {
             // if (thisObject == _objectInRange && !_isHandOccupied)
             //     _objectInRange = null;
