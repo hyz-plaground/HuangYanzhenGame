@@ -52,7 +52,7 @@ namespace Player
         
         public void OnDrawGizmos()
         {
-            _envAware.groundCheck.OnDrawGizmos(playerCollider, transform);
+            _envAware.GroundCheck.OnDrawGizmos(playerCollider, transform);
         }
     }
 }

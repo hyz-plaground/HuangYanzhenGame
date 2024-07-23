@@ -11,13 +11,7 @@ namespace Player
 {
     public class EnvAware
     {
-        
-        public GroundCheck groundCheck;
-
-        public EnvAware()
-        {
-            groundCheck = new GroundCheck();
-        }
+        public readonly GroundCheck GroundCheck = new GroundCheck();
     };
 
     public class GroundCheck

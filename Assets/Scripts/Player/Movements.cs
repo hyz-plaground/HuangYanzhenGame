@@ -69,7 +69,7 @@ namespace Player
                 {
                     "jump",
                     (remainCoyoteTime) => _envAware
-                                              .groundCheck
+                                              .GroundCheck
                                               // Player on ground
                                               .ThreeHitGroundCheck(playerCollider, transform) >= 1 ||
                                           // Allow coyote'
@@ -141,7 +141,7 @@ namespace Player
             else
             {
                 // Set coyote time.
-                if (_envAware.groundCheck.ThreeHitGroundCheck(playerCollider, transform) == 2)
+                if (_envAware.GroundCheck.ThreeHitGroundCheck(playerCollider, transform) == 2)
                 {
                     // Player Jumps from the edge
                     _remainingAllowCoyoteTime = maxAllowCoyoteTime;
