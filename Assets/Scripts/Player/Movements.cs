@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -15,36 +11,29 @@ namespace Player
         private static readonly PlayerProperties Prop = PlayerProperties.Instance;
 
         // Unity Basic Properties
-        private Collider2D playerCollider;
-        private Transform transform;
-        private Rigidbody2D _rigid;
+        private readonly Collider2D _playerCollider;
+        private readonly Transform _transform;
+        private readonly Rigidbody2D _rigid;
+
+        // Environment Awareness
+        private readonly EnvAware _envAware;
 
         // Player Movements
-        public float moveSpeed = Prop.PLAYER_DEFAULT_MOVE_SPEED;
-        public float jumpSpeed = Prop.PLAYER_DEFAULT_JUMP_SPEED;
-        public float rushSpeed = Prop.PLAYER_DEFAULT_RUSH_SPEED;
-
-        public bool haveRushCD = false;
-        public float rushCD = 2f;
-        public float rushDur = 2f;
-
-        public float maxAllowCoyoteTime = Prop.PLAYER_MAX_ALLOW_COYOTE_TIME; //离开地面后的最大土狼时间
-        public float maxGravityScale = Prop.PLAYER_MAX_GRAVITY_SCALE;
-
-        private Dictionary<string, Func<object, bool>> _checkFunc;
+        private readonly float _moveSpeed = Prop.PLAYER_DEFAULT_MOVE_SPEED;
+        private readonly float _jumpSpeed = Prop.PLAYER_DEFAULT_JUMP_SPEED;
+        private readonly float _maxAllowCoyoteTime = Prop.PLAYER_MAX_ALLOW_COYOTE_TIME; //离开地面后的最大土狼时间
+        private readonly float _maxGravityScale = Prop.PLAYER_MAX_GRAVITY_SCALE;
+        private readonly Dictionary<string, Func<object, bool>> _checkFunc;
 
         // Dynamic Player variables.
         private bool _isFaceTowardsRight = true;
-        private bool _isRushing = false;
-        private bool _isSpaceGravity = false;
-        private float _timeSinceLastRushed = 0;
-        private float _remainingAllowCoyoteTime = 0; //土狼
-
-        // Environment Awareness
-        private EnvAware _envAware;
+        private bool _isRushing;
+        private bool _isSpaceGravity;
+        private float _timeSinceLastRushed;
+        private float _remainingAllowCoyoteTime; //土狼
 
         // Input Config
-        private readonly Dictionary<string, Func<object>> _inputConfig = new Dictionary<string, Func<object>>
+        private readonly Dictionary<string, Func<object>> _inputConfig = new()
         {
             { "x", () => Input.GetAxis("Horizontal") },
             { "jump", () => Input.GetKey(KeyCode.Space) },
@@ -61,8 +50,8 @@ namespace Player
             Rigidbody2D rigid)
         {
             _envAware = envAware;
-            this.playerCollider = playerCollider;
-            this.transform = transform;
+            _playerCollider = playerCollider;
+            _transform = transform;
             _rigid = rigid;
             _checkFunc = new Dictionary<string, Func<object, bool>>
             {
@@ -91,7 +80,7 @@ namespace Player
         /// </summary>
         /// <param name="item"> The movement you need to enter.</param>
         /// <returns>A function that returns a boolean value on your given input.</returns>
-        public Func<object, bool> PlayerCan(string item)
+        private Func<object, bool> PlayerCan(string item)
         {
             return _checkFunc[item];
         }
@@ -102,7 +91,7 @@ namespace Player
         /// <param name="item">Name of the movement.</param>
         /// <typeparam name="T">Type of the value.</typeparam>
         /// <returns>The input value of the desired player movement.</returns>
-        public T GetInput<T>(string item)
+        private T GetInput<T>(string item)
         {
             return (T)_inputConfig[item]();
         }
@@ -113,7 +102,7 @@ namespace Player
         /// <returns>The horizontal component of the desired player velocity.</returns>
         private float GetXMove()
         {
-            var xMove = GetInput<float>("x") * moveSpeed;
+            var xMove = GetInput<float>("x") * _moveSpeed;
 
             if (!GetInput<bool>("rush") || !PlayerCan("rush")(_isRushing)) return xMove;
 
@@ -136,19 +125,19 @@ namespace Player
             float yMove;
             if (PlayerCan("fly")(_isSpaceGravity))
             {
-                yMove = GetInput<bool>("fly") ? moveSpeed : _rigid.velocity.y - 10f * Time.deltaTime;
+                yMove = GetInput<bool>("fly") ? _moveSpeed : _rigid.velocity.y - 10f * Time.deltaTime;
             }
             else
             {
                 // Set coyote time.
-                if (_envAware.GroundCheck.ThreeHitGroundCheck(playerCollider, transform) == 2)
+                if (_envAware.GroundCheck.ThreeHitGroundCheck(_playerCollider, _transform) == 2)
                 {
                     // Player Jumps from the edge
-                    _remainingAllowCoyoteTime = maxAllowCoyoteTime;
+                    _remainingAllowCoyoteTime = _maxAllowCoyoteTime;
                 }
 
                 yMove = PlayerCan("jump")(_remainingAllowCoyoteTime) && GetInput<bool>("jump")
-                    ? jumpSpeed
+                    ? _jumpSpeed
                     : _rigid.velocity.y;
             }
 
@@ -171,7 +160,7 @@ namespace Player
         private void ChangeFaceDirFrom(bool isFaceTowardsRight)
         {
             float scale = isFaceTowardsRight ? 1 : -1;
-            transform.localScale = new Vector3(scale, 1, 1);
+            _transform.localScale = new Vector3(scale, 1, 1);
         }
 
         private void ChangeGravityScale(bool isSpaceGravity)
@@ -183,9 +172,9 @@ namespace Player
             }
 
             // Player Falling: Gradually add gravityScale until max.
-            if (Math.Abs(_rigid.velocity.y) >= 0.1f && _rigid.gravityScale <= maxGravityScale)
+            if (Math.Abs(_rigid.velocity.y) >= 0.1f && _rigid.gravityScale <= _maxGravityScale)
             {
-                _rigid.gravityScale = math.min(_rigid.gravityScale + Time.deltaTime * 10f, maxGravityScale);
+                _rigid.gravityScale = math.min(_rigid.gravityScale + Time.deltaTime * 10f, _maxGravityScale);
             }
         }
 

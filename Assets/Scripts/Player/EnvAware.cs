@@ -14,13 +14,15 @@ namespace Player
         public readonly GroundCheck GroundCheck = new GroundCheck();
     };
 
+    /// <summary>
+    /// Detects if the player is on the ground.
+    /// </summary>
     public class GroundCheck
     {
         // Player Properties
         private static readonly PlayerProperties Prop = PlayerProperties.Instance;
         private readonly float _rayCastUpPosition = Prop.PLAYER_GROUND_DETECTION_RAYCAST_UP_POSITION;
         private readonly float _rayCastMaxDistance = Prop.PLAYER_GROUND_DETECTION_RAYCAST_MAX_DISTANCE;
-
         
         /// <summary>
         /// Get the collider size.
@@ -110,6 +112,37 @@ namespace Player
                 Vector2 endPos = startPos + -Vector2.up * _rayCastMaxDistance;
                 Gizmos.DrawLine(startPos, endPos);
             }
+        }
+    }
+
+    /// <summary>
+    /// Observes the environment.
+    /// </summary>
+    public class Observer
+    {
+        private GameObject _objectInRange;
+        private Rigidbody2D _objectRigid;
+
+        /// <summary>
+        /// Player observes an object.
+        /// </summary>
+        /// <param name="thisObject"> The object observed. </param>
+        private void ObserveObject(GameObject thisObject)
+        {
+            _objectInRange = thisObject;
+            _objectRigid = thisObject.GetComponent<Rigidbody2D>();
+            Debug.Log($"Observed {thisObject.name}");
+        }
+
+        /// <summary>
+        /// Player ignores an object.
+        /// </summary>
+        /// <param name="thisObject"> The object ignored. </param>
+        private void IgnoreObject(GameObject thisObject)
+        {
+            // if (thisObject == _objectInRange && !_isHandOccupied)
+            //     _objectInRange = null;
+            Debug.Log($"Ignored {thisObject.name}");
         }
     }
 }

@@ -18,8 +18,10 @@ public class PlayerHand : MonoBehaviour
         // Collectable object tells player that there is an object to be collected.
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.ExistCollectable, ObserveObject);
         EventCenterManager.Instance.AddEventListener<GameObject>(GameEvent.NonExistCollectable, IgnoreObject);
+        
         // Player intend to collect object.
         EventCenterManager.Instance.AddEventListener(GameEvent.PlayerTryInteract, InteractWithThisObject);
+        
         // Player is in range of an interactable object.
         EventCenterManager.Instance.AddEventListener<bool>(GameEvent.WithinRangeOfInteractable, SetIsPlayerWithinInteractable);
     }
