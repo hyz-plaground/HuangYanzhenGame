@@ -44,7 +44,8 @@ namespace Player
         
         public void OnDrawGizmos()
         {
-            _envAware.GroundCheck.OnDrawGizmos(playerCollider, transform);
+            _envAware.GroundCheck.GizmosDrawRay(playerCollider, transform);
+            CommonGizmos.Instance.DrawCollider(playerCollider, transform);
         }
     }
 }

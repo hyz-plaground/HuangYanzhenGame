@@ -1,9 +1,14 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Collectable : MonoBehaviour
 {
+    [SerializeField]
+    
     // Basic Properties
-    protected Rigidbody2D Rigid;
+    protected Rigidbody2D rigid;
+    public Collider2D fetchRange;
     protected bool IsAllowCollect = true;
 
     // Event center manager
@@ -12,7 +17,8 @@ public class Collectable : MonoBehaviour
     private void InitParams()
     {
         IsAllowCollect = true;
-        Rigid = GetComponent<Rigidbody2D>();
+        fetchRange = GetComponent<BoxCollider2D>();
+        rigid = GetComponent<Rigidbody2D>();
     }
 
     private void InitDelegates()
@@ -42,6 +48,11 @@ public class Collectable : MonoBehaviour
     {
         if (!ReferenceEquals(notifiedCollider.gameObject, gameObject))
             return;
-        Rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
+        rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
+    }
+
+    private void OnDrawGizmos()
+    {
+        CommonGizmos.Instance.DrawCollider(fetchRange, transform);
     }
 }

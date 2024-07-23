@@ -30,10 +30,10 @@ namespace Player
         /// </summary>
         /// <param name="collider2D"> The 2D collider of the player.</param>
         /// <returns></returns>
-        private static Vector3 GetColliderSize(Collider2D collider2D)
+        private static Vector2 GetColliderSize(Collider2D collider2D)
         {
             var c2DBounds = collider2D.bounds;
-            return new Vector3(c2DBounds.size.x, c2DBounds.size.y, c2DBounds.size.z);
+            return new Vector2(c2DBounds.size.x, c2DBounds.size.y);
         }
 
         /// <summary>
@@ -98,13 +98,16 @@ namespace Player
         /// <summary>
         /// Draw the ray cast in Unity Editor.
         /// </summary>
-        public void OnDrawGizmos(
+        public void GizmosDrawRay(
             Collider2D playerCollider2D,
             Transform transform)
         {
-            var objLength = GetColliderSize(playerCollider2D).x;
+            // Draw Ground Detection
+            var colliderSize = GetColliderSize(playerCollider2D);
+            var colliderOffset = playerCollider2D.offset;
+            var objLength = colliderSize.x;
             List<Vector2> rayOrigins = GetRayOrigins(playerCollider2D, transform, _rayCastUpPosition).ToList();
-            Color[] rayColors = { Color.green, Color.blue, Color.red };
+            Color[] rayColors = { Color.yellow, Color.blue, Color.red };
 
             for (var i = 0; i < rayOrigins.Count; i++)
             {
@@ -113,6 +116,8 @@ namespace Player
                 Vector2 endPos = startPos + -Vector2.up * _rayCastMaxDistance;
                 Gizmos.DrawLine(startPos, endPos);
             }
+
+
         }
     }
 

@@ -111,7 +111,7 @@ public class Key : Collectable
     
     private void PermanentlyBanCollect()
     {
-        Rigid.simulated = false;
+        rigid.simulated = false;
         transform.SetParent(NearestLock.transform);
         IsAllowCollect = false;
     }
