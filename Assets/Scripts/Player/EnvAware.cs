@@ -11,6 +11,7 @@ namespace Player
 {
     public class EnvAware
     {
+        
         public GroundCheck groundCheck;
 
         public EnvAware()
@@ -21,6 +22,12 @@ namespace Player
 
     public class GroundCheck
     {
+        // Player Properties
+        private static readonly PlayerProperties Prop = PlayerProperties.Instance;
+        private readonly float _rayCastUpPosition = Prop.PLAYER_GROUND_DETECTION_RAYCAST_UP_POSITION;
+        private readonly float _rayCastMaxDistance = Prop.PLAYER_GROUND_DETECTION_RAYCAST_MAX_DISTANCE;
+
+        
         /// <summary>
         /// Get the collider size.
         /// </summary>
@@ -96,29 +103,19 @@ namespace Player
         /// </summary>
         public void OnDrawGizmos(
             Collider2D playerCollider2D,
-            Transform transform,
-            float rayCastUpPosition = -0.5f,
-            float rayCastMaxDistance = 0.8f)
+            Transform transform)
         {
             var objLength = GetColliderSize(playerCollider2D).x;
-            List<Vector2> rayOrigins = GetRayOrigins(playerCollider2D, transform, rayCastUpPosition).ToList();
+            List<Vector2> rayOrigins = GetRayOrigins(playerCollider2D, transform, _rayCastUpPosition).ToList();
             Color[] rayColors = { Color.green, Color.blue, Color.red };
 
             for (var i = 0; i < rayOrigins.Count; i++)
             {
                 Gizmos.color = rayColors[i];
                 Vector2 startPos = rayOrigins[i];
-                Vector2 endPos = startPos + -Vector2.up * rayCastMaxDistance;
+                Vector2 endPos = startPos + -Vector2.up * _rayCastMaxDistance;
                 Gizmos.DrawLine(startPos, endPos);
             }
-        }
-    }
-
-    public class Trigger
-    {
-        void TriggerSpaceGravityRegion(bool enter, Func<bool> callback)
-        {
-            callback();
         }
     }
 }

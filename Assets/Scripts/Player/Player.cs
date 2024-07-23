@@ -24,10 +24,7 @@ namespace Player
         
         // Player Movement
         private Movements _movements;
-        
-        public float raycastUpPosition = PlayerProperties.Instance.PLAYER_GROUND_DETECTION_RAYCAST_UP_POSITION;
-        public float raycastMaxDistance = PlayerProperties.Instance.PLAYER_GROUND_DETECTION_RAYCAST_MAX_DISTANCE;
-        
+
         // Initialize parameters.
         private void InitParams()
         {
@@ -55,7 +52,7 @@ namespace Player
         
         public void OnDrawGizmos()
         {
-            _envAware.groundCheck.OnDrawGizmos(playerCollider, transform, raycastUpPosition, raycastMaxDistance);
+            _envAware.groundCheck.OnDrawGizmos(playerCollider, transform);
         }
     }
 }
