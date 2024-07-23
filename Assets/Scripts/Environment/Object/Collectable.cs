@@ -1,12 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Collectable : MonoBehaviour
 {
+    // Basic Properties
     protected Rigidbody2D Rigid;
     protected bool IsAllowCollect = true;
+
+    // Event center manager
+    private EventCenterManager ecm = EventCenterManager.Instance;
 
     private void InitParams()
     {
@@ -16,12 +17,9 @@ public class Collectable : MonoBehaviour
 
     private void InitDelegates()
     {
-        EventCenterManager.Instance.AddEventListener<Collider2D,bool>(GameEvent.CollectableEnterSpace,AdjustGravityScale);
+        ecm.AddEventListener<Collider2D, bool>(GameEvent.CollectableEnterSpace, AdjustGravityScale);
     }
     
-    /// <summary>
-    /// Initialize rigid body, add an event listener to control gravity scale.
-    /// </summary>
     protected void Start()
     {
         InitParams();
@@ -30,14 +28,14 @@ public class Collectable : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if ( IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
-            EventCenterManager.Instance.EventTrigger(GameEvent.ExistCollectable,gameObject);
+        if (IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
+            ecm.EventTrigger(GameEvent.ExistCollectable, gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if( IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
-            EventCenterManager.Instance.EventTrigger(GameEvent.NonExistCollectable,gameObject);
+        if (IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
+            ecm.EventTrigger(GameEvent.NonExistCollectable, gameObject);
     }
 
     private void AdjustGravityScale(Collider2D notifiedCollider, bool isCollectableEnterSpace)
@@ -46,5 +44,4 @@ public class Collectable : MonoBehaviour
             return;
         Rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
     }
-
 }

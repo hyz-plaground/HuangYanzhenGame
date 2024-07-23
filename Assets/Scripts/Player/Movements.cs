@@ -32,7 +32,7 @@ namespace Player
         private bool _isSpaceGravity;
         private float _timeSinceLastRushed;
         private float _remainingAllowCoyoteTime; //土狼
-
+        
         // Input Config
         private readonly InputConfig _in = new();
 
