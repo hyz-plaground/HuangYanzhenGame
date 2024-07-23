@@ -64,8 +64,8 @@ public class PlayerHand : MonoBehaviour
 
     private IEnumerator CollectCoroutine()
     {
-        _isCollecting = true;
         // Set crucial variables.
+        _isCollecting = true;
         _lastCollectTime = Time.time;
         _isHandOccupied = true;
 

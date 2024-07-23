@@ -140,12 +140,20 @@ namespace Player
             return xInput != 0 ? xInput >= 0 : isFaceTowardsRight;
         }
 
+        /// <summary>
+        /// Apply the change in face direction
+        /// </summary>
+        /// <param name="isFaceTowardsRight"> Whether the player is facing right. </param>
         private void ChangeFaceDirFrom(bool isFaceTowardsRight)
         {
             float scale = isFaceTowardsRight ? 1 : -1;
             _transform.localScale = new Vector3(scale, 1, 1);
         }
 
+        /// <summary>
+        /// Apply the change in the player's gravity scale.
+        /// </summary>
+        /// <param name="isSpaceGravity"> Whether the player is in space.</param>
         private void ChangeGravityScale(bool isSpaceGravity)
         {
             if (isSpaceGravity || Math.Abs(_rigid.velocity.y) <= 0.1f)
