@@ -11,7 +11,12 @@ namespace Player
 {
     public class EnvAware
     {
-        public GroundCheck groundCheck = new GroundCheck();
+        public GroundCheck groundCheck;
+
+        public EnvAware()
+        {
+            groundCheck = new GroundCheck();
+        }
     };
 
     public class GroundCheck
@@ -85,8 +90,7 @@ namespace Player
 
             return hitNum;
         }
-
-
+        
         /// <summary>
         /// Draw the ray cast in Unity Editor.
         /// </summary>
@@ -107,6 +111,14 @@ namespace Player
                 Vector2 endPos = startPos + -Vector2.up * rayCastMaxDistance;
                 Gizmos.DrawLine(startPos, endPos);
             }
+        }
+    }
+
+    public class Trigger
+    {
+        void TriggerSpaceGravityRegion(bool enter, Func<bool> callback)
+        {
+            callback();
         }
     }
 }
