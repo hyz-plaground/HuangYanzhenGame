@@ -141,7 +141,10 @@ namespace Player
         /// <param name="thisObject"> The object ignored. </param>
         public void IgnoreObject(GameObject thisObject)
         {
-            if (thisObject == ObservedObj && !ObservedObj.transform.parent)
+            if (
+                thisObject == ObservedObj &&
+                // Object is on the player's hand.
+                !ObservedObj.transform.parent.CompareTag(PlayerProperties.Instance.PLAYER_HAND_TAG))
                 ObservedObj = null;
             Debug.Log($"Ignored {thisObject.name}. ObservedObj={(ObservedObj ? ObservedObj.name : "None")}");
         }

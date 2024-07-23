@@ -5,7 +5,9 @@ public class PlayerProperties : Singleton<PlayerProperties>
     public float PLAYER_DEFAULT_JUMP_SPEED = 10f;
     public float PLAYER_DEFAULT_RUSH_SPEED = 40f;
    
+    // Player Tags
     public string PLAYER_TAG = "ENT_PLAYER";
+    public string PLAYER_HAND_TAG = "ENT_PLAYER_HAND";
     
     // Detailed Player Movement
     public float PLAYER_DEFAULT_RUSH_CD = 0.3f;
