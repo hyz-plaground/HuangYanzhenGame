@@ -93,8 +93,7 @@ public class PlayerHand : MonoBehaviour
         // Re-set belongings of the target object.
         _observer.ObservedObjRigid.simulated = true;
         _observer.ObservedObj.transform.SetParent(null);
-
-
+        
         // Clear variable.
         _observer.ObservedObj = null;
         _observer.ObservedObjRigid = null;
