@@ -20,8 +20,8 @@ public class PlayerHand : MonoBehaviour
     private void InitDelegates()
     {
         // Collectable object tells player that there is an object to be collected.
-        ecm.AddEventListener<GameObject>(GameEvent.ExistCollectable, _observer.ObserveObject);
-        ecm.AddEventListener<GameObject>(GameEvent.NonExistCollectable, _observer.IgnoreObject);
+        ecm.AddEventListener<GameObject>(GameEvent.PlayerApproachThisCollectable, _observer.ObserveObject);
+        ecm.AddEventListener<GameObject>(GameEvent.PlayerLeaveThisCollectable, _observer.IgnoreObject);
 
         // Player intend to collect object.
         ecm.AddEventListener(GameEvent.PlayerTryInteract, InteractWithThisObject);
@@ -75,7 +75,7 @@ public class PlayerHand : MonoBehaviour
         _observer.ObservedObj.transform.SetParent(gameObject.transform);
 
         // Remove ExistCollectable event listener. Do not listen to outer object anymore.
-        ecm.RemoveEventListener<GameObject>(GameEvent.ExistCollectable,
+        ecm.RemoveEventListener<GameObject>(GameEvent.PlayerApproachThisCollectable,
             _observer.ObserveObject);
 
         yield return new WaitForSeconds(0.5f); // Wait for 0.5 sec
@@ -101,7 +101,7 @@ public class PlayerHand : MonoBehaviour
         yield return new WaitForSeconds(0.5f); // Wait for 0.5 sec
 
         // Re-enable the event listener. 
-        ecm.AddEventListener<GameObject>(GameEvent.ExistCollectable, _observer.ObserveObject);
+        ecm.AddEventListener<GameObject>(GameEvent.PlayerApproachThisCollectable, _observer.ObserveObject);
         _isCollecting = false;
     }
 

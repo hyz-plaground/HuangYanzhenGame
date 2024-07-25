@@ -32,16 +32,21 @@ public class Collectable : MonoBehaviour
         InitDelegates();
     }
 
+    private bool IsPlayer(Collider2D other)
+    {
+        return other.CompareTag(PlayerProperties.Instance.PLAYER_TAG);
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
-            ecm.EventTrigger(GameEvent.ExistCollectable, gameObject);
+        if (IsAllowCollect && IsPlayer(other))
+            ecm.EventTrigger(GameEvent.PlayerApproachThisCollectable, gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (IsAllowCollect && other.CompareTag(PlayerProperties.Instance.PLAYER_TAG))
-            ecm.EventTrigger(GameEvent.NonExistCollectable, gameObject);
+        if (IsAllowCollect && IsPlayer(other))
+            ecm.EventTrigger(GameEvent.PlayerLeaveThisCollectable, gameObject);
     }
 
     private void AdjustGravityScale(Collider2D notifiedCollider, bool isCollectableEnterSpace)
@@ -50,9 +55,5 @@ public class Collectable : MonoBehaviour
             return;
         rigid.gravityScale = isCollectableEnterSpace ? 0 : 1;
     }
-
-    private void OnDrawGizmos()
-    {
-        CommonGizmos.Instance.DrawCollider(fetchRange, transform);
-    }
+    
 }

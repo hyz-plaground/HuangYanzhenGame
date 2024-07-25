@@ -18,8 +18,8 @@ public enum GameEvent
     MachineTriggered,
     
     // Collectable 
-    ExistCollectable,
-    NonExistCollectable,
+    PlayerApproachThisCollectable,      // A player approaches a specific collectable
+    PlayerLeaveThisCollectable,         // A player leaves a specific collectable
     CollectableEnterSpace,
     
     // Interactable

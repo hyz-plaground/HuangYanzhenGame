@@ -8,6 +8,8 @@ namespace UnityEngine
             Collider2D collider2D,
             Transform transform)
         {
+            if (!collider2D || !transform)
+                return;
             var c2DBounds = collider2D.bounds;
             var colliderSize = new Vector2(c2DBounds.size.x, c2DBounds.size.y);
             var colliderOffset = collider2D.offset;
@@ -15,7 +17,7 @@ namespace UnityEngine
             Gizmos.color = Color.green;
             switch (collider2D)
             {
-                case BoxCollider2D:
+                case BoxCollider2D boxCollider2D:
                     Vector2 bl = transform.TransformPoint(colliderOffset - colliderSize / 2);
                     Vector2 br = transform.TransformPoint(new Vector2(colliderOffset.x + colliderSize.x / 2,
                         colliderOffset.y - colliderSize.y / 2));
@@ -28,7 +30,7 @@ namespace UnityEngine
                     Gizmos.DrawLine(tl, tr);
                     Gizmos.DrawLine(tr, br);
                     break;
-                case CircleCollider2D:
+                case CircleCollider2D circleCollider2D:
                     Vector3 position = transform.position + (Vector3)colliderOffset;
                     Gizmos.DrawWireSphere(position, c2DBounds.size.x/2);
                     break;
